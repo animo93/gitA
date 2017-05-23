@@ -37,17 +37,6 @@ public class ApiClient {
 
         if(!TextUtils.isEmpty(Constants.AUTH_TOKEN)) {
 
-            /*Authenticator authenticator = new Authenticator() {
-                @Override
-                public Request authenticate(Route route, Response response) throws IOException {
-                    Log.e("ApiClient","Token "+Constants.AUTH_TOKEN);
-
-                    return response.request().newBuilder()
-                            .header("Authorization",Constants.AUTH_TOKEN)
-                            .build();
-                }
-            };*/
-
             Interceptor interceptor = new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {

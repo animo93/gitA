@@ -1,6 +1,7 @@
 package com.example.animo.gita;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,12 +52,21 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
     }
 
     @Override
-    public void onBindViewHolder(RepoAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(RepoAdapterViewHolder holder, final int position) {
 
         holder.titleView.setText(repositoryList.get(position).getName());
         holder.forkView.setText(String.valueOf(repositoryList.get(position).getForks()));
         holder.languageView.setText(repositoryList.get(position).getLanguage());
         holder.urlView.setText(repositoryList.get(position).getUrl());
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(),ReposDetailActivity.class);
+                intent.putExtra(Constants.REPO,repositoryList.get(position).getName());
+                intent.putExtra(Constants.OWNER,repositoryList.get(position).getOwner().getLogin());
+            }
+        });
 
     }
 
@@ -65,24 +75,22 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
         return repositoryList==null?0:repositoryList.size();
     }
 
-    public class RepoAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class RepoAdapterViewHolder extends RecyclerView.ViewHolder {
         public final TextView titleView;
         public final TextView urlView;
         public final TextView forkView;
         public final TextView languageView;
+        public final View mView;
 
 
         public RepoAdapterViewHolder(View itemView) {
             super(itemView);
+            mView = itemView;
             titleView = (TextView) itemView.findViewById(R.id.title);
             urlView = (TextView) itemView.findViewById(R.id.url);
             forkView = (TextView) itemView.findViewById(R.id.forks);
             languageView = (TextView) itemView.findViewById(R.id.language);
         }
 
-        @Override
-        public void onClick(View view) {
-
-        }
     }
 }

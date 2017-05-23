@@ -14,7 +14,6 @@
 .gitignore_REMOTE_5969
 .idea/vcs.xml
 app/libs/
-app/src/main/res/drawable/
 /app/src/main/res/values/secrets.xml
 libs/
 src/main/res/drawable/
