@@ -1,4 +1,9 @@
-package com.example.animo.gita;
+package com.example.animo.gita.retrofit;
+
+import com.example.animo.gita.Constants;
+import com.example.animo.gita.model.Files;
+import com.example.animo.gita.model.RepoCommit;
+import com.example.animo.gita.model.Repository;
 
 import java.util.List;
 
@@ -17,6 +22,9 @@ public interface ApiInterface {
 
     @GET(Constants.COMMITS)
     Call<List<RepoCommit>> getCommits(@Path("user") String userId, @Path("repo") String repoName);
+
+    @GET(Constants.CONTENTS)
+    Call<List<Files>> getContents(@Path("user") String userId, @Path("repo") String repoName, @Path("path") String path);
 
 
 }

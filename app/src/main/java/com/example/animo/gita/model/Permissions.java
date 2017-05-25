@@ -1,4 +1,4 @@
-package com.example.animo.gita;
+package com.example.animo.gita.model;
 
 /**
  * Created by animo on 10/5/17.

@@ -1,4 +1,4 @@
-package com.example.animo.gita;
+package com.example.animo.gita.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.animo.gita.retrofit.ApiClient;
+import com.example.animo.gita.retrofit.ApiInterface;
+import com.example.animo.gita.Constants;
+import com.example.animo.gita.R;
+import com.example.animo.gita.adapter.CommitAdapter;
+import com.example.animo.gita.model.RepoCommit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +58,7 @@ public class CommitsFragment extends Fragment {
 
         Log.d(LOG_TAG,"Repo name "+repo+" and owner "+owner);
 
-        ApiInterface apiService = ApiClient.createService(ApiInterface.class);
+        ApiInterface apiService = ApiClient.createService(ApiInterface.class,null);
 
         retrofit2.Call<List<RepoCommit>> call = apiService.getCommits(owner,repo);
         call.enqueue(new Callback<List<RepoCommit>>() {

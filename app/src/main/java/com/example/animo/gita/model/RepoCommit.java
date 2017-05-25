@@ -1,4 +1,6 @@
-package com.example.animo.gita;
+package com.example.animo.gita.model;
+
+import com.example.animo.gita.model.Commit;
 
 /**
  * Created by animo on 23/5/17.

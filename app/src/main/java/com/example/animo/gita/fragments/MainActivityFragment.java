@@ -1,4 +1,4 @@
-package com.example.animo.gita;
+package com.example.animo.gita.fragments;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -9,17 +9,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.animo.gita.retrofit.ApiClient;
+import com.example.animo.gita.retrofit.ApiInterface;
+import com.example.animo.gita.AsyncProcessOutput;
+import com.example.animo.gita.Constants;
+import com.example.animo.gita.R;
+import com.example.animo.gita.adapter.RepoAdapter;
+import com.example.animo.gita.model.Repository;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements AsyncProcessOutput{
+public class MainActivityFragment extends Fragment implements AsyncProcessOutput {
 
     public static final String LOG_TAG = MainActivityFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
@@ -48,7 +55,7 @@ public class MainActivityFragment extends Fragment implements AsyncProcessOutput
         repoAdapter = new RepoAdapter(getContext());
         mRecyclerView.setAdapter(repoAdapter);
 
-        ApiInterface apiService = ApiClient.createService(ApiInterface.class);
+        ApiInterface apiService = ApiClient.createService(ApiInterface.class, Constants.AUTH_TOKEN);
 
         retrofit2.Call<List<Repository>> call = apiService.getRepos();
         call.enqueue(new Callback<List<Repository>>() {

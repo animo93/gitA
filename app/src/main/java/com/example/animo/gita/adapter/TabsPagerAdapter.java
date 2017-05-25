@@ -1,4 +1,4 @@
-package com.example.animo.gita;
+package com.example.animo.gita.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

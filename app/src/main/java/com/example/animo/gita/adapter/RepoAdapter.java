@@ -1,13 +1,17 @@
-package com.example.animo.gita;
+package com.example.animo.gita.adapter;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.animo.gita.Constants;
+import com.example.animo.gita.R;
+import com.example.animo.gita.activity.ReposDetailActivity;
+import com.example.animo.gita.model.Repository;
 
 import java.util.List;
 
@@ -65,6 +69,8 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
                 Intent intent = new Intent(view.getContext(),ReposDetailActivity.class);
                 intent.putExtra(Constants.REPO,repositoryList.get(position).getName());
                 intent.putExtra(Constants.OWNER,repositoryList.get(position).getOwner().getLogin());
+                intent.putExtra(Constants.PATH,"");
+                mContext.startActivity(intent);
             }
         });
 

@@ -5,17 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.animo.gita.fragments.CommitsFragment">
-    <!--tools:showIn="@layout/activity_main">-->
-
-    <!--<android.support.v7.widget.SearchView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/search">
-    </android.support.v7.widget.SearchView>-->
+    tools:context="com.example.animo.gita.fragments.MainActivityFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/commits_recycler_view"
+        android:id="@+id/files_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical">

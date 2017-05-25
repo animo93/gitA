@@ -1,10 +1,12 @@
-package com.example.animo.gita;
+package com.example.animo.gita.model;
 
 /**
  * Created by animo on 10/5/17.
  */
 
 
+import com.example.animo.gita.model.Owner;
+import com.example.animo.gita.model.Permissions;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

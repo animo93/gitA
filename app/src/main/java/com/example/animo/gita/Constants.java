@@ -8,8 +8,8 @@ import android.content.res.Resources;
 
 public class Constants {
 
+    public static final String AUTH_TOKEN= "";
     //public static final String AUTH_TOKEN= Resources.getSystem().getString(android.R.string.unknownName);
-    public static final String AUTH_TOKEN= Resources.getSystem().getString(android.R.string.unknownName);
 
     public static final String ROOT_URL="https://api.github.com";
 
@@ -21,4 +21,8 @@ public class Constants {
 
     public static final String REPO = "Repos";
     public static final String OWNER = "Owner";
+    public static final String URL = "Url";
+
+    public static final String CONTENTS = "/repos/{user}/{repo}/contents/{path}";
+    public static final String PATH = "path";
 }

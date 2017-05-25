@@ -1,7 +1,9 @@
-package com.example.animo.gita;
+package com.example.animo.gita.retrofit;
 
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.example.animo.gita.Constants;
 
 import java.io.IOException;
 
@@ -33,27 +35,25 @@ public class ApiClient {
             .baseUrl(Constants.ROOT_URL)
             .addConverterFactory(GsonConverterFactory.create());
 
-    public static <S> S createService(Class<S> serviceClass) {
+    public static <S> S createService(Class<S> serviceClass ,String authToken) {
 
-        if(!TextUtils.isEmpty(Constants.AUTH_TOKEN)) {
+        if(!TextUtils.isEmpty(authToken)) {
 
             Interceptor interceptor = new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     Request request = chain.request().newBuilder()
-                            .addHeader("Authorization"," token "+Constants.AUTH_TOKEN)
+                            .addHeader("Authorization", " token " + Constants.AUTH_TOKEN)
                             .build();
                     return chain.proceed(request);
                 }
             };
-            httpClient.addInterceptor(loggingInterceptor);
-
-            //httpClient.authenticator(authenticator);
             httpClient.addInterceptor(interceptor);
+        }
 
+            httpClient.addInterceptor(loggingInterceptor);
             builder.client(httpClient.build());
             retrofit = builder.build();
-        }
 
         return retrofit.create(serviceClass);
     }

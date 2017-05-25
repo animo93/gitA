@@ -1,4 +1,4 @@
-package com.example.animo.gita;
+package com.example.animo.gita.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +23,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.animo.gita.CircleTransform;
+import com.example.animo.gita.R;
+import com.example.animo.gita.fragments.MainActivityFragment;
 
 public class MainActivity extends AppCompatActivity {
 
