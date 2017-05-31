@@ -1,6 +1,7 @@
 package com.example.animo.gita.retrofit;
 
 import com.example.animo.gita.Constants;
+import com.example.animo.gita.model.Commit;
 import com.example.animo.gita.model.Files;
 import com.example.animo.gita.model.RepoCommit;
 import com.example.animo.gita.model.Repository;
@@ -25,6 +26,11 @@ public interface ApiInterface {
 
     @GET(Constants.CONTENTS)
     Call<List<Files>> getContents(@Path("user") String userId, @Path("repo") String repoName, @Path("path") String path);
+
+    @GET(Constants.COMMIT)
+    Call<Commit> getCommit(@Path("user") String userId,
+                             @Path("repo") String repoName,
+                             @Path("sha") String sha);
 
 
 }

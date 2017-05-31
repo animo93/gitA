@@ -1,13 +1,16 @@
 package com.example.animo.gita.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.animo.gita.Constants;
 import com.example.animo.gita.R;
+import com.example.animo.gita.activity.CommitsDetailActivity;
 import com.example.animo.gita.model.RepoCommit;
 
 import java.util.List;
@@ -21,6 +24,24 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitAdap
     private static final String LOG_TAG = CommitAdapter.class.getSimpleName();
 
     private List<RepoCommit> repoCommitList;
+    private String repo;
+    private String owner;
+
+    public String getRepo() {
+        return repo;
+    }
+
+    public void setRepo(String repo) {
+        this.repo = repo;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
 
     private Context mContext;
 
@@ -52,10 +73,23 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitAdap
     }
 
     @Override
-    public void onBindViewHolder(CommitAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(CommitAdapterViewHolder holder, final int position) {
 
         holder.titleView.setText(repoCommitList.get(position).getCommit().getMessage());
         holder.descView.setText(repoCommitList.get(position).getCommit().getCommitter().getDate());
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(),CommitsDetailActivity.class);
+                RepoCommit repoCommit = getRepoCommitList().get(position);
+                intent.putExtra(Constants.REPO,getRepo());
+                intent.putExtra(Constants.OWNER,getOwner());
+                intent.putExtra(Constants.SHA,repoCommit.getSha());
+
+                mContext.startActivity(intent);
+            }
+        });
 
     }
 
@@ -67,9 +101,11 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitAdap
     public class CommitAdapterViewHolder extends RecyclerView.ViewHolder {
         public final TextView titleView;
         public final TextView descView;
+        public final View mView;
 
         public CommitAdapterViewHolder(View itemView) {
             super(itemView);
+            this.mView = itemView;
             this.titleView = (TextView) itemView.findViewById(R.id.title);
             this.descView = (TextView) itemView.findViewById(R.id.desc);
         }

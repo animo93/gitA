@@ -33,4 +33,14 @@ public class Committer {
     public void setName(String name) {
         this.name = name;
     }
+
+    private String login;
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
 }

@@ -12,6 +12,7 @@ import android.util.Log;
 import com.example.animo.gita.Constants;
 import com.example.animo.gita.R;
 import com.example.animo.gita.adapter.TabsPagerAdapter;
+import com.example.animo.gita.fragments.AboutFragment;
 import com.example.animo.gita.fragments.CommitsFragment;
 import com.example.animo.gita.fragments.FilesFragment;
 
@@ -42,11 +43,25 @@ public class ReposDetailActivity extends AppCompatActivity{
         final String repo = intent.getStringExtra(Constants.REPO);
         final String owner = intent.getStringExtra(Constants.OWNER);
         final String path = intent.getStringExtra(Constants.PATH);
+        final String title = intent.getStringExtra(Constants.TITLE);
+        final String sourceId = intent.getStringExtra(Constants.SOURCE);
+        final String desc = intent.getStringExtra(Constants.DESC);
+        final String language = intent.getStringExtra(Constants.LANG);
+        final int issueCount = intent.getIntExtra(Constants.ISSUE_COUNT,0);
+        final int stargazers = intent.getIntExtra(Constants.STARGAZERS,0);
+        final int forksCount = intent.getIntExtra(Constants.FORKS,0);
 
         Bundle bundle = new Bundle();
         bundle.putString(Constants.REPO,repo);
         bundle.putString(Constants.OWNER,owner);
         bundle.putString(Constants.PATH,path);
+        bundle.putString(Constants.TITLE,title);
+        bundle.putString(Constants.SOURCE,sourceId);
+        bundle.putString(Constants.DESC,desc);
+        bundle.putString(Constants.LANG,language);
+        bundle.putInt(Constants.ISSUE_COUNT,issueCount);
+        bundle.putInt(Constants.STARGAZERS,stargazers);
+        bundle.putInt(Constants.FORKS,forksCount);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         if(viewPager != null) {
@@ -65,9 +80,13 @@ public class ReposDetailActivity extends AppCompatActivity{
 
         FilesFragment filesFragment = new FilesFragment();
         filesFragment.setArguments(bundle);
+
+        AboutFragment aboutFragment = new AboutFragment();
+        aboutFragment.setArguments(bundle);
+
         adapter.addFragment(filesFragment , "Files");
         adapter.addFragment(commitsFragment ,"Commits");
-        //adapter.addFragment(new CommitsFragment() , "Activity");
+        adapter.addFragment(aboutFragment, "About");
         viewPager.setAdapter(adapter);
     }
 }

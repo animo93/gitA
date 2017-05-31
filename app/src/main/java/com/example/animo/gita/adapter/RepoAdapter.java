@@ -67,8 +67,19 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(),ReposDetailActivity.class);
-                intent.putExtra(Constants.REPO,repositoryList.get(position).getName());
-                intent.putExtra(Constants.OWNER,repositoryList.get(position).getOwner().getLogin());
+                Repository repo = getRepositoryList().get(position);
+                intent.putExtra(Constants.REPO,repo.getName());
+                intent.putExtra(Constants.OWNER,repo.getOwner().getLogin());
+                intent.putExtra(Constants.TITLE,repo.getFullName());
+                intent.putExtra(Constants.SOURCE, repo.getSource() == null ?
+                        null : repo.getSource().getOwner().getLogin());
+                intent.putExtra(Constants.DESC, repo.getDescription() == null ?
+                        null : (String) repo.getDescription());
+                intent.putExtra(Constants.LANG, repo.getLanguage() == null ?
+                        null : repo.getLanguage());
+                intent.putExtra(Constants.ISSUE_COUNT, repo.getOpenIssuesCount());
+                intent.putExtra(Constants.STARGAZERS, repo.getStargazersCount());
+                intent.putExtra(Constants.FORKS, repo.getForksCount());
                 intent.putExtra(Constants.PATH,"");
                 mContext.startActivity(intent);
             }

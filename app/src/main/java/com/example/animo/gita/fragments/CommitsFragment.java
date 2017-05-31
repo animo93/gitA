@@ -53,8 +53,8 @@ public class CommitsFragment extends Fragment {
         commitAdapter = new CommitAdapter(getContext());
         mRecyclerView.setAdapter(commitAdapter);
 
-        String repo = getArguments().getString(Constants.REPO);
-        String owner = getArguments().getString(Constants.OWNER);
+        final String repo = getArguments().getString(Constants.REPO);
+        final String owner = getArguments().getString(Constants.OWNER);
 
         Log.d(LOG_TAG,"Repo name "+repo+" and owner "+owner);
 
@@ -67,6 +67,8 @@ public class CommitsFragment extends Fragment {
                 Log.i(LOG_TAG,"inside onResponse");
                 repoCommits = response.body();
                 commitAdapter.setRepoCommitList(repoCommits);
+                commitAdapter.setOwner(owner);
+                commitAdapter.setRepo(repo);
                 commitAdapter.notifyDataSetChanged();
                 Log.d(LOG_TAG,"Size of Commits "+repoCommits.size());
             }
