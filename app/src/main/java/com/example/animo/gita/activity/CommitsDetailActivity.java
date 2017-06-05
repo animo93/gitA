@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.animo.gita.Constants;
+import com.example.animo.gita.NotificationService;
 import com.example.animo.gita.R;
 import com.example.animo.gita.adapter.CommitFileAdapter;
 import com.example.animo.gita.model.Commit;
@@ -62,6 +63,9 @@ public class CommitsDetailActivity extends AppCompatActivity {
         final String repo = intent.getStringExtra(Constants.REPO);
         final String owner = intent.getStringExtra(Constants.OWNER);
         final String sha = intent.getStringExtra(Constants.SHA);
+
+        NotificationService notificationService = new NotificationService(this);
+        notificationService.createIntent("Hello World");
 
         ApiInterface apiService = ApiClient.createService(ApiInterface.class,null);
         Call<Commit> call = apiService.getCommit(owner,repo,sha);
