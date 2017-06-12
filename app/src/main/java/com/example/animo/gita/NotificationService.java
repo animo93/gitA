@@ -23,18 +23,18 @@ public class NotificationService {
         mContext = context;
     }
 
-    public void createIntent(String message){
+    public void createIntent(String repo,String owner,String sha){
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(mContext)
                 .setSmallIcon(R.drawable.github_logo)
                 .setContentTitle("Github Activity NOtification")
-                .setContentText(message);
+                .setContentText("New Push Activity on "+repo+" by "+owner);
         //Creates an explicit Intent for an Activity
         Intent resultIntent = new Intent(mContext, CommitsDetailActivity.class);
-        resultIntent.putExtra(Constants.REPO,"gitA");
-        resultIntent.putExtra(Constants.OWNER,"animo93");
-        resultIntent.putExtra(Constants.SHA,"081350386741d7d88f7d231b87799ef5c9b6754d");
+        resultIntent.putExtra(Constants.REPO,repo);
+        resultIntent.putExtra(Constants.OWNER,owner);
+        resultIntent.putExtra(Constants.SHA,sha);
         // The stack builder object will contain an artificial back stack for the
         // started Activity.
         // This ensures that navigating backward from the Activity leads out of

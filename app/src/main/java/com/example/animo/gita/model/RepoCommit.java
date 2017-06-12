@@ -9,6 +9,15 @@ import com.example.animo.gita.model.Commit;
 public class RepoCommit {
     private String sha;
     private Commit commit;
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public String getSha() {
         return sha;

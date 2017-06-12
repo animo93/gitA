@@ -9,7 +9,7 @@ import android.content.res.Resources;
 public class Constants {
 
 
-    //public static final String AUTH_TOKEN= Resources.getSystem().getString(android.R.string.unknownName);
+    public static final String AUTH_TOKEN= "";
 
     public static final String ROOT_URL="https://api.github.com";
 
@@ -18,6 +18,8 @@ public class Constants {
     public static final String REPOSITORIES = USER+"/repos";
 
     public static final String COMMITS = "/repos/{user}/{repo}/commits";
+
+    public static final String EVENTS = "/repos/{user}/{repo}/events";
 
     public static final String REPO = "Repos";
     public static final String OWNER = "Owner";
@@ -36,4 +38,8 @@ public class Constants {
 
     public static final String COMMIT = COMMITS+"/{sha}";
     public static final String SHA = "sha";
+    public static final String DIFF_CONTENT = "diff_content";
+    public static final int NOTIFICATION_ID = 0;
+    public static final String ETAG = "ETag";
+    public static final String LAST_MODIFIED = "Last-Modified";
 }

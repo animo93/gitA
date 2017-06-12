@@ -61,6 +61,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.animo.gita.activity.ReposDetailActivity" />
         </activity>
+
+        <service
+            android:exported="false"
+            android:name=".FetchActivityService">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
+
+        <provider
+            android:authorities="com.example.animo.gita"
+            android:name=".data.RepoProvider" />
     </application>
 
 </manifest>

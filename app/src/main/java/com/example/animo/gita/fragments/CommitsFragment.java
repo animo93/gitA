@@ -10,12 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.animo.gita.retrofit.ApiClient;
-import com.example.animo.gita.retrofit.ApiInterface;
 import com.example.animo.gita.Constants;
 import com.example.animo.gita.R;
 import com.example.animo.gita.adapter.CommitAdapter;
 import com.example.animo.gita.model.RepoCommit;
+import com.example.animo.gita.retrofit.ApiClient;
+import com.example.animo.gita.retrofit.ApiInterface;
 
 import java.util.ArrayList;
 import java.util.List;

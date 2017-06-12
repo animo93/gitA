@@ -64,8 +64,8 @@ public class CommitsDetailActivity extends AppCompatActivity {
         final String owner = intent.getStringExtra(Constants.OWNER);
         final String sha = intent.getStringExtra(Constants.SHA);
 
-        NotificationService notificationService = new NotificationService(this);
-        notificationService.createIntent("Hello World");
+        /*NotificationService notificationService = new NotificationService(this);
+        notificationService.createIntent("Hello World");*/
 
         ApiInterface apiService = ApiClient.createService(ApiInterface.class,null);
         Call<Commit> call = apiService.getCommit(owner,repo,sha);

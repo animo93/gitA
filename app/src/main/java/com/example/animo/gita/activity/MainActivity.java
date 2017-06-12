@@ -15,17 +15,27 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.animo.gita.CircleTransform;
+import com.example.animo.gita.FetchActivityService;
 import com.example.animo.gita.R;
 import com.example.animo.gita.fragments.MainActivityFragment;
+import com.firebase.jobdispatcher.Constraint;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.RetryStrategy;
+import com.firebase.jobdispatcher.Trigger;
+
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        scheduleJob();
+
         mHandler = new Handler();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -97,6 +109,40 @@ public class MainActivity extends AppCompatActivity {
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
         }
+    }
+
+    private void scheduleJob() {
+        //Every 12 hours periodically expressed as seconds
+        final int periodicity = (int) java.util.concurrent.TimeUnit.HOURS.toSeconds(2);
+        // A small windows of time when triggering is OK
+        final int toleranceLevel = (int) TimeUnit.HOURS.toSeconds(1);
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));
+        Bundle bundle = new Bundle();
+        Job myJob = dispatcher.newJobBuilder()
+                // the JobService that will be called
+                .setService(FetchActivityService.class)
+                // uniquely identifies the job
+                .setTag("my-unique-tag")
+                // one-off job
+                .setRecurring(false)
+                // don't persist past a device reboot
+                .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
+                // start between 0 and 60 seconds from now
+                .setTrigger(Trigger.executionWindow(0, 80))
+                // don't overwrite an existing job with the same tag
+                .setReplaceCurrent(false)
+                // retry with exponential backoff
+                .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
+                // constraints that need to be satisfied for the job to run
+                .setConstraints(
+                        // only run on an unmetered network
+                        Constraint.ON_ANY_NETWORK
+
+                )
+                .setExtras(bundle)
+                .build();
+
+        dispatcher.mustSchedule(myJob);
     }
 
     private void setupNavigationView() {
