@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void scheduleJob() {
         //Every 12 hours periodically expressed as seconds
-        final int periodicity = (int) java.util.concurrent.TimeUnit.HOURS.toSeconds(2);
+        final int periodicity = (int) java.util.concurrent.TimeUnit.HOURS.toSeconds(1);
         // A small windows of time when triggering is OK
         final int toleranceLevel = (int) TimeUnit.HOURS.toSeconds(1);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));

@@ -63,9 +63,13 @@ public class MainActivityFragment extends Fragment implements AsyncProcessOutput
             public void onResponse(retrofit2.Call<List<Repository>> call, Response<List<Repository>> response) {
                 Log.i(LOG_TAG,"inside onResponse");
                 repositories = response.body();
-                repoAdapter.setRepositoryList(repositories);
-                repoAdapter.notifyDataSetChanged();
-                Log.d(LOG_TAG,"Size of repos "+repositories.size());
+                if(repositories!=null){
+                    Log.d(LOG_TAG,"Size of repos "+repositories.size());
+                    repoAdapter.setRepositoryList(repositories);
+                    repoAdapter.notifyDataSetChanged();
+                }
+
+
             }
 
             @Override
