@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.animo.gita.data.RepoContract;
 import com.example.animo.gita.model.Event;
+import com.example.animo.gita.model.PayLoad;
 import com.example.animo.gita.model.RepoCommit;
 import com.example.animo.gita.retrofit.ApiClient;
 import com.example.animo.gita.retrofit.ApiInterface;
@@ -62,22 +63,27 @@ public class FetchActivityService extends JobService {
                     final String owner = cursor.getString(COL_REPO_OWNER_ID);
                     String etag = "\""+cursor.getString(COL_ETAG_ID)+"\"";
                     final String repo = cursor.getString(COL_REPO_TITLE);
-                    Log.e(LOG_TAG,"Owner "+owner+" etag "+etag+" repo "+repo);
                     ApiInterface apiService = ApiClient.createService(ApiInterface.class,null);
                     Call<List<Event>> call = apiService.getEventStatus(owner,repo,etag);
                     call.enqueue(new Callback<List<Event>>() {
                         @Override
                         public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
-                            Log.e(LOG_TAG,"inside onResponse");
+                            Log.i(LOG_TAG,"inside onResponse");
                             if(response !=null){
                                 if(response.body()==null)
                                     return;
                                 else {
                                     List<Event> events = response.body();
-                                    Log.e(LOG_TAG,"event size "+events.size());
-                                    RepoCommit repoCommit = events.get(0).getPayLoad().getCommits().get(0);
-                                    NotificationService notificationService = new NotificationService(getApplicationContext());
-                                    notificationService.createIntent(repo,owner,repoCommit.getSha());
+                                    if(events!=null && events.size()>0){
+                                        Log.i(LOG_TAG,"event size "+events.size());
+                                        if(events.get(0).getType().equalsIgnoreCase(Constants.PUSH_EVENT)){
+                                            RepoCommit repoCommit = events.get(0).getPayload().getCommits().get(0);
+                                            NotificationService notificationService = new NotificationService(getApplicationContext());
+                                            notificationService.createIntent(repo,owner,repoCommit.getSha());
+                                        }
+
+                                    }
+
                                 }
                             }
 

@@ -28,7 +28,6 @@ public class FileDiffActivity extends AppCompatActivity{
 
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.diff_layout);
 
-        String string = "@@ -12,7 +12,7 @@\n android:supportsRtl=\"true\"\n android:theme=\"@style/AppTheme\">\n <activity\n- android:name=\".MainActivity\"\n+ android:name=\".activity.MainActivity\"\n android:label=\"@string/app_name\"\n android:theme=\"@style/AppTheme.NoActionBar\">\n <intent-filter>\n@@ -21,6 +21,24 @@\n <category android:name=\"android.intent.category.LAUNCHER\" />\n </intent-filter>\n </activity>\n+\n+ <activity\n+ android:name=\".activity.ReposDetailActivity\"\n+ android:label=\"@string/app_name\"\n+ android:theme=\"@style/AppTheme.NoActionBar\">\n+ <meta-data\n+ android:name=\"android.support.PARENT_ACTIVITY\"\n+ android:value=\"com.example.animo.gita.activity.MainActivity\" />\n+ </activity>\n+\n+ <activity\n+ android:name=\".activity.FileViewActivity\"\n+ android:label=\"@string/app_name\"\n+ android:theme=\"@style/AppTheme.NoActionBar\">\n+ <meta-data\n+ android:name=\"android.support.PARENT_ACTIVITY\"\n+ android:value=\"com.example.animo.gita.activity.ReposDetailActivity\" />\n+ </activity>\n </application>\n \n </manifest>\n\\ No newline at end of file";
         String[] splitLines = content.split("\n");
         for(int i=0;i<splitLines.length;i++){
             TextView textView = new TextView(this);

@@ -7,7 +7,7 @@ package com.example.animo.gita.model;
 public class Event {
     private String type;
     private Actor actor;
-    private PayLoad payLoad;
+    private PayLoad payload;
     private String created_at;
 
     public String getType() {
@@ -26,12 +26,12 @@ public class Event {
         this.actor = actor;
     }
 
-    public PayLoad getPayLoad() {
-        return payLoad;
+    public PayLoad getPayload() {
+        return payload;
     }
 
-    public void setPayLoad(PayLoad payLoad) {
-        this.payLoad = payLoad;
+    public void setPayload(PayLoad payload) {
+        this.payload = payload;
     }
 
     public String getCreated_at() {

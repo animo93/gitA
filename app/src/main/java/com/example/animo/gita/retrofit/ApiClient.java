@@ -35,7 +35,7 @@ public class ApiClient {
             .baseUrl(Constants.ROOT_URL)
             .addConverterFactory(GsonConverterFactory.create());
 
-    public static <S> S createService(Class<S> serviceClass ,String authToken) {
+    public static <S> S createService(Class<S> serviceClass , final String authToken) {
 
         if(!TextUtils.isEmpty(authToken)) {
 
@@ -43,7 +43,7 @@ public class ApiClient {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     Request request = chain.request().newBuilder()
-                            .addHeader("Authorization", " token " + Constants.AUTH_TOKEN)
+                            .addHeader("Authorization", " token " + authToken)
                             .build();
                     return chain.proceed(request);
                 }

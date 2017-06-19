@@ -34,6 +34,7 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.concurrent.TimeUnit;
 
@@ -178,9 +179,13 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(new Intent(MainActivity.this, null));
                                 drawerLayout.closeDrawers();
                                 return true;
-                            case R.id.nav_privacy_policy:
+                            case R.id.nav_log_out:
                                 // launch new intent instead of loading fragment
-                                startActivity(new Intent(MainActivity.this, null));
+                                FirebaseAuth auth = FirebaseAuth.getInstance();
+                                if(auth!=null){
+                                    auth.signOut();
+                                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                                }
                                 drawerLayout.closeDrawers();
                                 return true;
                             default:

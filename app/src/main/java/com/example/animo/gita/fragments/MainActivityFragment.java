@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.animo.gita.Utility;
 import com.example.animo.gita.retrofit.ApiClient;
 import com.example.animo.gita.retrofit.ApiInterface;
 import com.example.animo.gita.AsyncProcessOutput;
@@ -54,8 +55,9 @@ public class MainActivityFragment extends Fragment implements AsyncProcessOutput
 
         repoAdapter = new RepoAdapter(getContext());
         mRecyclerView.setAdapter(repoAdapter);
-
-        ApiInterface apiService = ApiClient.createService(ApiInterface.class, Constants.AUTH_TOKEN);
+        String accessToken = new Utility().getAccessToken(getContext());
+        Log.d(LOG_TAG,"Retrived Access Token is "+accessToken);
+        ApiInterface apiService = ApiClient.createService(ApiInterface.class, accessToken);
 
         retrofit2.Call<List<Repository>> call = apiService.getRepos();
         call.enqueue(new Callback<List<Repository>>() {

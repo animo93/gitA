@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+//apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 25
@@ -43,4 +44,10 @@ dependencies {
 
     //Firebase JobDispatcher Library
     compile 'com.firebase:firebase-jobdispatcher:0.6.0'
+
+    //Firebase Authentication library
+    compile 'com.google.firebase:firebase-auth:11.0.0'
+
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "610271358538",
+    "firebase_url": "https://gita-6edfc.firebaseio.com",
+    "project_id": "gita-6edfc",
+    "storage_bucket": "gita-6edfc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:610271358538:android:a75197f937cb44a0",
+        "android_client_info": {
+          "package_name": "com.example.animo.gita"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "610271358538-i5v3m2erf6cdc5i4ikbiqh8fmjjgnb9t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoRhiM5fcLA-xs5RuSTRaZM3F9dYrnWAE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

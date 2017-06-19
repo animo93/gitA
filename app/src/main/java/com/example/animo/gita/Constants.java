@@ -9,7 +9,6 @@ import android.content.res.Resources;
 public class Constants {
 
 
-    public static final String AUTH_TOKEN= "";
 
     public static final String ROOT_URL="https://api.github.com";
 
@@ -42,4 +41,13 @@ public class Constants {
     public static final int NOTIFICATION_ID = 0;
     public static final String ETAG = "ETag";
     public static final String LAST_MODIFIED = "Last-Modified";
+    public static final String PUSH_EVENT = "PushEvent";
+    public static final java.lang.String OATH2_URL = "http://github.com/login/oauth/authorize?";
+    public static final java.lang.String REDIRECT_URL = "com.example.animo.gita://user/oAuth";
+    public static final String ACCESS_TOKEN = "https://github.com/login/oauth/access_token";
+    public static final String PREFS_NAME = "MyPrefsFile";
+    public static final String AUTH_CODE = "code";
+    public static final String AUTH_STATE = "state";
+    public static final CharSequence ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm";
+    public static final String RANDOM_CODE = "afewf2ef234sd";
 }
