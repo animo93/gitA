@@ -28,6 +28,21 @@ public class RepoContract {
         public static final String COLUMN_REPO_OWNER = "owner";
         public static final String COLUMN_UPDATED_DATE = "updated_date";
 
+        public static final int COL_ID=0;
+        public static final int COL_REPO_TITLE=1;
+        public static final int COL_REPO_ID=2;
+        public static final int COL_REPO_OWNER_ID=3;
+        public static final int COL_ETAG_ID=4;
+
+
+        public static final String[] REPO_COLUMNS = {
+                RepoContract.FavRepos.TABLE_NAME+ "." + RepoContract.FavRepos._ID,
+                RepoContract.FavRepos.COLUMN_TITLE ,
+                RepoContract.FavRepos.COLUMN_REPO_ID,
+                RepoContract.FavRepos.COLUMN_REPO_OWNER,
+                RepoContract.FavRepos.COLUMN_ETAG
+        };
+
         public static final String CONTENT_TYPE=
                 ContentResolver.CURSOR_DIR_BASE_TYPE+"/"+CONTENT_AUTHORITY+"/"+PATH_REPOS;
 

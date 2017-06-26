@@ -4,4 +4,8 @@
     <dimen name="profile_width">75dp</dimen>
     <dimen name="profile_height">75dp</dimen>
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="widget_detail_default_height">180dp</dimen>
+    <dimen name="widget_detail_min_resize_height">180dp</dimen>
+    <dimen name="widget_detail_min_resize_width">220dp</dimen>
+    <dimen name="widget_detail_default_width">150dp</dimen>
 </resources>

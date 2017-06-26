@@ -31,19 +31,15 @@ public class FetchActivityService extends JobService {
     public FetchActivityService(){
         favRepos.add("gitA");
     }
-    private static final String[] REPO_COLUMNS = {
+    /*private static final String[] REPO_COLUMNS = {
             RepoContract.FavRepos.TABLE_NAME+ "." + RepoContract.FavRepos._ID,
             RepoContract.FavRepos.COLUMN_TITLE ,
             RepoContract.FavRepos.COLUMN_REPO_ID,
             RepoContract.FavRepos.COLUMN_REPO_OWNER,
             RepoContract.FavRepos.COLUMN_ETAG
-    };
+    };*/
 
-    static final int COL_ID=0;
-    static final int COL_REPO_TITLE=1;
-    static final int COL_REPO_ID=2;
-    static final int COL_REPO_OWNER_ID=3;
-    static final int COL_ETAG_ID=4;
+
 
 
     @Override
@@ -52,7 +48,7 @@ public class FetchActivityService extends JobService {
         Cursor cursor = null;
         try{
             cursor = getContentResolver().query(RepoContract.FavRepos.CONTENT_URI,
-                    REPO_COLUMNS,
+                    RepoContract.FavRepos.REPO_COLUMNS,
                     null,
                     null,
                     null);
@@ -60,9 +56,9 @@ public class FetchActivityService extends JobService {
             if(cursor!=null){
                 Log.e(LOG_TAG,"Number of fav repos "+cursor.getCount());
                 for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-                    final String owner = cursor.getString(COL_REPO_OWNER_ID);
-                    String etag = "\""+cursor.getString(COL_ETAG_ID)+"\"";
-                    final String repo = cursor.getString(COL_REPO_TITLE);
+                    final String owner = cursor.getString(RepoContract.FavRepos.COL_REPO_OWNER_ID);
+                    String etag = "\""+cursor.getString(RepoContract.FavRepos.COL_ETAG_ID)+"\"";
+                    final String repo = cursor.getString(RepoContract.FavRepos.COL_REPO_TITLE);
                     ApiInterface apiService = ApiClient.createService(ApiInterface.class,null);
                     Call<List<Event>> call = apiService.getEventStatus(owner,repo,etag);
                     call.enqueue(new Callback<List<Event>>() {

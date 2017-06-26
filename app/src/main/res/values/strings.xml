@@ -6,6 +6,8 @@
     <string name="openDrawer">open_drawer</string>
     <string name="closeDrawer">close_drawer</string>
     <string name="access_token">access_token</string>
+    <string name="empty_forecast_list">No Favourite Repos Available</string>
+    <string name="title_widget_detail">Fav Repos</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
