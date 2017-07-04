@@ -1,11 +1,15 @@
 package com.example.animo.gita.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +20,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.animo.gita.Constants;
+import com.example.animo.gita.CustomViews.ScrollDisabledListView;
 import com.example.animo.gita.NotificationService;
 import com.example.animo.gita.R;
+import com.example.animo.gita.adapter.CommitDetailAdapter;
 import com.example.animo.gita.adapter.CommitFileAdapter;
 import com.example.animo.gita.model.Commit;
 import com.example.animo.gita.model.Files;
@@ -25,7 +31,10 @@ import com.example.animo.gita.retrofit.ApiClient;
 import com.example.animo.gita.retrofit.ApiInterface;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,9 +50,12 @@ public class CommitsDetailActivity extends AppCompatActivity {
     private TextView daysView;
     private TextView commitName;
     private TextView commitDesc;
-    private ListView changedFilesListView;
-    private ListView addedFilesListView;
-    private ListView renamedFilesListView;
+    private ScrollDisabledListView changedFilesListView;
+    private ScrollDisabledListView addedFilesListView;
+    private ScrollDisabledListView renamedFilesListView;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private CommitDetailAdapter commitDetailAdapter;
 
     private Context mContext;
 
@@ -57,7 +69,21 @@ public class CommitsDetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.commit_detail_view_fragment);
-        initializeView();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("gitA");
+
+        //initializeView();
+        mRecyclerView = (RecyclerView) findViewById(R.id.commit_detail_recycler_view);
+
+        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setAutoMeasureEnabled(true);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        commitDetailAdapter = new CommitDetailAdapter(getApplicationContext());
+        mRecyclerView.setAdapter(commitDetailAdapter);
+
+
 
         Intent intent = getIntent();
         final String repo = intent.getStringExtra(Constants.REPO);
@@ -72,7 +98,35 @@ public class CommitsDetailActivity extends AppCompatActivity {
             public void onResponse(Call<Commit> call, Response<Commit> response) {
                 Log.i(LOG_TAG,"inside onResponse");
                 Commit commit = response.body();
-                setupViews(commit);
+                //setupViews(commit);
+                getViewTypeMap(commit);
+            }
+
+            private void getViewTypeMap(Commit commit) {
+                Map<String,List<Files>> fileListMap = new LinkedHashMap<String, List<Files>>();
+                List<Files> addedFilesList = new ArrayList<Files>();
+                List<Files> renamedFilesList = new ArrayList<Files>();
+                List<Files> deletedFilesList = new ArrayList<Files>();
+
+                for(Files files : commit.getFiles()){
+                    if(files.getStatus().equals(Constants.FILES_ADDED))
+                        addedFilesList.add(files);
+                    else if(files.getStatus().equals(Constants.FILES_RENAMED))
+                        renamedFilesList.add(files);
+                    else deletedFilesList.add(files);
+                }
+                if(addedFilesList.size()>0)
+                    fileListMap.put(Constants.FILES_ADDED,addedFilesList);
+                if(renamedFilesList.size()>0)
+                fileListMap.put(Constants.FILES_RENAMED,renamedFilesList);
+                if(deletedFilesList.size()>0)
+                fileListMap.put(Constants.FILES_DELETD,deletedFilesList);
+                Log.d(LOG_TAG,"Total map size "+fileListMap.size());
+
+                commitDetailAdapter.setMapFileList(fileListMap);
+                commitDetailAdapter.setCommit(commit);
+                commitDetailAdapter.notifyDataSetChanged();
+
             }
 
             private void setupViews(Commit commit) {
@@ -92,7 +146,7 @@ public class CommitsDetailActivity extends AppCompatActivity {
                 Log.d(LOG_TAG,"Total file list size "+commit.getFiles().size());
                 for(Files files : commit.getFiles()){
                     if(files.getStatus().equals(type)) {
-                       /* TextView textView = new TextView(mContext);
+                        /*TextView textView = new TextView(mContext);
                         textView.setText(files.getName());
 
                         TextView stats = new TextView(mContext);
@@ -105,7 +159,7 @@ public class CommitsDetailActivity extends AppCompatActivity {
                         linearLayout.addView(textView);
                         linearLayout.addView(stats);
 
-                        addedFilesListView.addView(linearLayout);*/
+                        listView.addView(linearLayout);*/
                         filesList.add(files);
 
                     }
@@ -122,13 +176,14 @@ public class CommitsDetailActivity extends AppCompatActivity {
         });
     }
 
+
     private void initializeView() {
-        commiterView = (TextView)findViewById(R.id.commiter_name);
+        /*commiterView = (TextView)findViewById(R.id.commiter_name);
         daysView = (TextView) findViewById(R.id.days);
         commitName = (TextView) findViewById(R.id.commit_name);
         commitDesc = (TextView) findViewById(R.id.commit_desc);
-        changedFilesListView = (ListView) findViewById(R.id.changed_files_list);
-        addedFilesListView = (ListView) findViewById(R.id.added_files_list);
-        renamedFilesListView = (ListView) findViewById(R.id.renamed_files_list);
+        changedFilesListView = (ScrollDisabledListView) findViewById(R.id.changed_files_list);
+        addedFilesListView = (ScrollDisabledListView) findViewById(R.id.added_files_list);
+        renamedFilesListView = (ScrollDisabledListView) findViewById(R.id.renamed_files_list);*/
     }
 }

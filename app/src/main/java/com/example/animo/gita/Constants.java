@@ -50,4 +50,7 @@ public class Constants {
     public static final String AUTH_STATE = "state";
     public static final CharSequence ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm";
     public static final String RANDOM_CODE = "afewf2ef234sd";
+    public static final String FILES_ADDED = "added";
+    public static final String FILES_RENAMED = "renamed";
+    public static final String FILES_DELETD = "modified";
 }

@@ -1,5 +1,7 @@
 package com.example.animo.gita.model;
 
+import java.util.Map;
+
 /**
  * Created by animo on 24/5/17.
  */
@@ -49,6 +51,15 @@ public class Files {
     private int additions;
     private int deletions;
     private String patch;
+    private Map<String,String> _links;
+
+    public Map<String, String> get_links() {
+        return _links;
+    }
+
+    public void set_links(Map<String, String> _links) {
+        this._links = _links;
+    }
 
     public String getFilename() {
         return filename;

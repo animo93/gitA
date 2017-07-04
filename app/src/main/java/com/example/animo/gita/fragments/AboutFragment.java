@@ -66,8 +66,11 @@ public class AboutFragment extends Fragment {
                 for(Files files : filesList){
                     if(files.getType().equals("file") &&
                             files.getName().equals("README.md")){
-                        Log.d(LOG_TAG,"readme url "+files.getDownload_url());
-                        webView.loadUrl(files.getDownload_url());
+                        /*Log.d(LOG_TAG,"readme url "+files.getDownload_url());
+                        webView.loadUrl(files.getDownload_url());*/
+                        String url = files.get_links().get("html");
+                        Log.d(LOG_TAG,"readmeUrl "+url);
+                        webView.loadUrl(url);
                         break;
                     }
                 }
