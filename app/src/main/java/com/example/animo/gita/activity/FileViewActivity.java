@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.webkit.WebView;
 
 import com.example.animo.gita.Constants;
@@ -14,6 +16,7 @@ import com.example.animo.gita.R;
  */
 
 public class FileViewActivity extends AppCompatActivity {
+    private static final String LOG_TAG = FileViewActivity.class.getSimpleName();
 
     private WebView mWebView;
 
@@ -31,8 +34,14 @@ public class FileViewActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.file_web_view);
-
         Intent intent = getIntent();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        String title = intent.getStringExtra(Constants.TITLE);
+        Log.d(LOG_TAG,"Title is "+title);
+        toolbar.setTitle(title);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         String url = intent.getStringExtra(Constants.URL);
 
         mWebView = (WebView) findViewById(R.id.file_web_view);

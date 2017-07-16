@@ -31,7 +31,6 @@
 
         <activity
             android:name=".activity.FileViewActivity"
-            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

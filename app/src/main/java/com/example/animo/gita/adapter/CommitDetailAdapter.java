@@ -117,6 +117,7 @@ public class CommitDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             Log.i(LOG_TAG,"inside onClick");
                             Files files= value.get(finalI);
                             Intent intent = new Intent(mContext, FileDiffActivity.class);
+                            intent.putExtra(Constants.TITLE,files.getName());
                             intent.putExtra(Constants.DIFF_CONTENT,files.getPatch());
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             mContext.startActivity(intent);

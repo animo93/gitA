@@ -10,6 +10,15 @@ public class Commit {
 
     private Committer committer;
     private String message;
+    private Author author;
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
 
     public List<Files> getFiles() {
         return files;

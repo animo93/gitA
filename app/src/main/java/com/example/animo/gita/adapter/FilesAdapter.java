@@ -88,6 +88,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FilesAdapter
             Glide.with(mContext).load(R.drawable.ic_insert_drive_file_black_24dp)
                     .crossFade()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .override(100,100)
                     .into(holder.imageView);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +96,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FilesAdapter
                 public void onClick(View view) {
                     Intent intent = new Intent(view.getContext(),FileViewActivity.class);
                     intent.putExtra(Constants.URL,filesList.get(position).getDownload_url());
+                    intent.putExtra(Constants.TITLE,filesList.get(position).getName());
                     mContext.startActivity(intent);
                 }
             });
@@ -102,6 +104,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FilesAdapter
         } else {
             Glide.with(mContext).load(R.drawable.ic_folder_black_24dp)
                     .crossFade()
+                    .override(100,100)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.imageView);
 
