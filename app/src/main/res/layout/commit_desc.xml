@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/commiter_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
                 android:id="@+id/days"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="4 days ago" />
+                tools:text="4 days ago" />-->
 
             <TextView
                 android:id="@+id/commit_name"
@@ -38,6 +38,9 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 tools:text="Added File Fragment" />
 
             <TextView
@@ -45,6 +48,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="italic"
+                android:layout_marginTop="4dp"
+                android:layout_marginLeft="8dp"
                 tools:text="33 changed files with 506 additions and 42 deletions." />
         </LinearLayout>
 

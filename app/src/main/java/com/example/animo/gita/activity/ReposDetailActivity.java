@@ -45,6 +45,7 @@ public class ReposDetailActivity extends AppCompatActivity{
         final String path = intent.getStringExtra(Constants.PATH);
         final String title = intent.getStringExtra(Constants.TITLE);
         final String sourceId = intent.getStringExtra(Constants.SOURCE);
+        Log.e(LOG_TAG,"source is "+sourceId);
         final String desc = intent.getStringExtra(Constants.DESC);
         final String language = intent.getStringExtra(Constants.LANG);
         final int issueCount = intent.getIntExtra(Constants.ISSUE_COUNT,0);

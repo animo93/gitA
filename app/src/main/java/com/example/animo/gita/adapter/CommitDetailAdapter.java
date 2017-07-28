@@ -87,15 +87,15 @@ public class CommitDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder.getItemViewType() == 0){
             CommitDescViewHolder holder0 = (CommitDescViewHolder) holder;
-            holder0.commiterView.setText(commit.getCommitter().getLogin());
-            holder0.commitName.setText(commit.getMessage());
+            //holder0.commiterView.setText(commit.getCommitter().getLogin());
+            holder0.commitName.setText(commit.getCommit().getMessage());
             holder0.commitDesc.setText("Showing "+commit.getFiles().size()+" changed files with "+
                     commit.getStats().getAdditions()+" additions and "+commit.getStats().getDeletions()+" deletions");
 
         }else{
             CommitDetailViewHolder holder1 = (CommitDetailViewHolder) holder;
             String key = (String) mapFileList.keySet().toArray()[position-1];
-            holder1.typeView.setText(key);
+            holder1.typeView.setText("Files "+ key);
             final List<Files> value = mapFileList.get(key);
             Log.d(LOG_TAG,"Size of "+key+" "+value.size());
 
@@ -186,15 +186,15 @@ public class CommitDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public class CommitDescViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView commiterView;
-        public TextView daysView;
+        /*public TextView commiterView;
+        public TextView daysView;*/
         public TextView commitName;
         public TextView commitDesc;
 
         public CommitDescViewHolder(View itemView) {
             super(itemView);
-            this.commiterView = (TextView)itemView.findViewById(R.id.commiter_name);
-            this.daysView = (TextView) itemView.findViewById(R.id.days);
+           /* this.commiterView = (TextView)itemView.findViewById(R.id.commiter_name);
+            this.daysView = (TextView) itemView.findViewById(R.id.days);*/
             this.commitName = (TextView) itemView.findViewById(R.id.commit_name);
             this.commitDesc = (TextView) itemView.findViewById(R.id.commit_desc);
         }

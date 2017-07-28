@@ -53,4 +53,5 @@ public class Constants {
     public static final String FILES_ADDED = "added";
     public static final String FILES_RENAMED = "renamed";
     public static final String FILES_DELETD = "modified";
+    public static final String REPO_DETAIL = "/repos/{user}/{repo}";
 }

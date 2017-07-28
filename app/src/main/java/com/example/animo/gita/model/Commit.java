@@ -11,6 +11,15 @@ public class Commit {
     private Committer committer;
     private String message;
     private Author author;
+    private Commit commit;
+
+    public Commit getCommit() {
+        return commit;
+    }
+
+    public void setCommit(Commit commit) {
+        this.commit = commit;
+    }
 
     public Author getAuthor() {
         return author;

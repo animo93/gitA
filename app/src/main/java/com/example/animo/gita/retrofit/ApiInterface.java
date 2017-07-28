@@ -55,5 +55,11 @@ public interface ApiInterface {
                                 @Field("client_id") String clientId,
                                 @Field("client_secret") String clientSecret);
 
+    @GET(Constants.REPO_DETAIL)
+    Call<Repository> getRepoDetail(@Path("user") String user,
+                                   @Path("repo") String repo);
+
+
+
 
 }

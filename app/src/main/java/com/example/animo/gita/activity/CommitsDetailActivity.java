@@ -80,7 +80,7 @@ public class CommitsDetailActivity extends AppCompatActivity {
         mLayoutManager.setAutoMeasureEnabled(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        commitDetailAdapter = new CommitDetailAdapter(getApplicationContext());
+        commitDetailAdapter = new CommitDetailAdapter(this);
         mRecyclerView.setAdapter(commitDetailAdapter);
 
 
@@ -99,6 +99,7 @@ public class CommitsDetailActivity extends AppCompatActivity {
                 Log.i(LOG_TAG,"inside onResponse");
                 Commit commit = response.body();
                 //setupViews(commit);
+
                 getViewTypeMap(commit);
             }
 

@@ -50,6 +50,12 @@ public class LoginActivity extends AppCompatActivity{
 
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e(LOG_TAG,"inside onDestroy");
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         Log.i(LOG_TAG,"inside onResume");
@@ -80,7 +86,13 @@ public class LoginActivity extends AppCompatActivity{
                                             public void onComplete(@NonNull Task<AuthResult> task) {
                                                 Log.d(LOG_TAG,"Sign in with credential "+task.isSuccessful());
                                                 saveToSharedPreference(getString(R.string.access_token),accessToken);
-                                                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                                /*Intent intent = new Intent(mActivity,MainActivity.class);
+                                                startActivity(intent);*/
+                                                finish();
+                                                Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(
+                                                        getBaseContext().getPackageName()
+                                                );
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                 startActivity(intent);
                                                 if(!task.isSuccessful()){
                                                     Log.e(LOG_TAG,"Sign in with credential ",task.getException());
@@ -120,7 +132,9 @@ public class LoginActivity extends AppCompatActivity{
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser!=null){
             Log.d(LOG_TAG,"Current user is "+currentUser.getDisplayName());
-            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+            finish();
+            Intent intent = new Intent(this,MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
     }
@@ -146,7 +160,7 @@ public class LoginActivity extends AppCompatActivity{
                         Intent.ACTION_VIEW,
                         buildUri
                 );
-                //intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }
         });

@@ -23,6 +23,7 @@
                 android:id="@+id/avatar_id"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/github_logo"
                 android:layout_weight="1"/>
 
         <LinearLayout
@@ -37,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="serif"
-                android:text="Heading"
+                android:text="@string/heading"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                 android:textColor="@color/colorPrimaryDark"
                 android:ellipsize="end"
@@ -48,7 +49,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Description"
+                android:text="@string/description"
                 android:id="@+id/desc"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textSize="13sp" />

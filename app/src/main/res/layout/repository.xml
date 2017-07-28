@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="serif"
-                android:text="Heading"
+                android:text="@string/heading"
                 android:textAllCaps="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                 android:textColor="@color/colorPrimaryDark"
@@ -44,14 +44,14 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:fontFamily="sans-serif"
-                    android:text="Url" />
+                    android:text="@string/url" />
 
                 <TextView
                     android:id="@+id/url"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Test Descr" />
+                    android:text="@string/test_descr" />
 
             </LinearLayout>
 
@@ -65,14 +65,13 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Forks" />
+                    android:text="@string/forks" />
 
                 <TextView
                     android:id="@+id/forks"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="12" />
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
@@ -86,14 +85,13 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Language" />
+                    android:text="@string/language" />
 
                 <TextView
                     android:id="@+id/language"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="Java" />
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
@@ -101,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/fav_button"
-                android:text="Favourite" />
+                android:text="@string/favourite" />
 
 
 

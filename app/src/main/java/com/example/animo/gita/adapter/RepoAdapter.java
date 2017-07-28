@@ -41,6 +41,10 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
 
     private Context mContext;
 
+    Repository repository;
+
+    String sourceId;
+
     public List<Repository> getRepositoryList() {
         return repositoryList;
     }
@@ -139,13 +143,11 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(),ReposDetailActivity.class);
+                final Intent intent = new Intent(view.getContext(),ReposDetailActivity.class);
                 Repository repo = getRepositoryList().get(position);
                 intent.putExtra(Constants.REPO,repo.getName());
                 intent.putExtra(Constants.OWNER,repo.getOwner().getLogin());
                 intent.putExtra(Constants.TITLE,repo.getFullName());
-                intent.putExtra(Constants.SOURCE, repo.getSource() == null ?
-                        null : repo.getSource().getOwner().getLogin());
                 intent.putExtra(Constants.DESC, repo.getDescription() == null ?
                         null : (String) repo.getDescription());
                 intent.putExtra(Constants.LANG, repo.getLanguage() == null ?
@@ -154,7 +156,30 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
                 intent.putExtra(Constants.STARGAZERS, repo.getStargazersCount());
                 intent.putExtra(Constants.FORKS, repo.getForksCount());
                 intent.putExtra(Constants.PATH,"");
-                mContext.startActivity(intent);
+
+
+                ApiInterface apiService = ApiClient.createService(ApiInterface.class, null);
+                Call<Repository> call = apiService.getRepoDetail(repo.getOwner().getLogin(),repo.getName());
+
+                call.enqueue(new Callback<Repository>() {
+                    @Override
+                    public void onResponse(Call<Repository> call, Response<Repository> response) {
+                        repository = response.body();
+                        if(repository!=null){
+                            sourceId = (repository.getFork()) ? repository.getSource().getOwner().getLogin()
+                                    : null;
+                            intent.putExtra(Constants.SOURCE,sourceId);
+                            mContext.startActivity(intent);
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Repository> call, Throwable t) {
+                        Log.e(LOG_TAG,"inside failure "+t.toString());
+
+                    }
+                });
             }
         });
 

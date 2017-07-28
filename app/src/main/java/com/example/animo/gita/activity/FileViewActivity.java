@@ -10,6 +10,8 @@ import android.webkit.WebView;
 
 import com.example.animo.gita.Constants;
 import com.example.animo.gita.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 /**
  * Created by animo on 24/5/17.
@@ -20,6 +22,7 @@ public class FileViewActivity extends AppCompatActivity {
 
     private WebView mWebView;
 
+    private AdView mAdView;
     @Override
     public void onBackPressed() {
         if(mWebView.canGoBack()){
@@ -46,6 +49,10 @@ public class FileViewActivity extends AppCompatActivity {
 
         mWebView = (WebView) findViewById(R.id.file_web_view);
         mWebView.loadUrl(url);
+
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
     }
 }

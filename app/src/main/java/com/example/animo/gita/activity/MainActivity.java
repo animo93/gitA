@@ -65,10 +65,14 @@ public class MainActivity extends AppCompatActivity {
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
 
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.navigation_drawer);
+        Log.e(MainActivity.class.getSimpleName(),"inside onCreate");
+        //setContentView(R.layout.navigation_drawer);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -76,9 +80,9 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        scheduleJob();
+        //scheduleJob();
 
-        mHandler = new Handler();
+       /* mHandler = new Handler();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
@@ -90,18 +94,18 @@ public class MainActivity extends AppCompatActivity {
 
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
 
-        Log.e(MainActivity.class.getSimpleName(),activityTitles[0]);
+        Log.e(MainActivity.class.getSimpleName(),activityTitles[0]);*/
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
-        loadNavHeader();
+        /*loadNavHeader();
 
         setupNavigationView();
 
@@ -109,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             navItemIndex =0 ;
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
-        }
+        }*/
     }
 
     private void scheduleJob() {
@@ -174,12 +178,12 @@ public class MainActivity extends AppCompatActivity {
                                 navItemIndex = 4;
                                 CURRENT_TAG = TAG_SETTINGS;
                                 break;
-                            case R.id.nav_about_us:
+                            /*case R.id.nav_about_us:
                                 // launch new intent instead of loading fragment
                                 startActivity(new Intent(MainActivity.this, null));
                                 drawerLayout.closeDrawers();
-                                return true;
-                            case R.id.nav_log_out:
+                                return true;*/
+                           /* case R.id.nav_log_out:
                                 // launch new intent instead of loading fragment
                                 FirebaseAuth auth = FirebaseAuth.getInstance();
                                 if(auth!=null){
@@ -187,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
                                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                                 }
                                 drawerLayout.closeDrawers();
-                                return true;
+                                return true;*/
                             default:
                                 navItemIndex = 0;
                         }
@@ -337,6 +341,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e(LOG_TAG,"inside on Destroy");
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -344,7 +354,18 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            if(auth!=null){
+                auth.signOut();
+                finish();
+                //startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(
+                        getBaseContext().getPackageName()
+                );
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
             return true;
         }
 

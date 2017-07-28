@@ -336,7 +336,8 @@ public class Repository {
     @SerializedName("permissions")
     @Expose
     public Permissions permissions;
-
+    @SerializedName("source")
+    @Expose
     public Source source;
 
     public Source getSource() {

@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.webkit.WebView;
 import android.widget.TextView;
 
@@ -93,19 +95,21 @@ public class AboutFragment extends Fragment {
         titleView.setText(aboutFragment.getArguments().getString(Constants.TITLE));
         String source = aboutFragment.getArguments().getString(Constants.SOURCE);
         if(source == null)
-            forkedFromView.setEnabled(false);
-        else
-            forkedFromView.setText(source);
+            ((ViewManager)forkedFromView.getParent()).removeView(forkedFromView);
+        else{
+            String sourceString = "forked from <b>" + source + "</b> ";
+            forkedFromView.setText(Html.fromHtml(sourceString));
+        }
 
         String desc = aboutFragment.getArguments().getString(Constants.DESC);
         if(desc == null)
-            descriptionView.setEnabled(false);
+            ((ViewManager)descriptionView.getParent()).removeView(descriptionView);
         else
             descriptionView.setText(desc);
 
         String language = aboutFragment.getArguments().getString(Constants.LANG);
         if(language == null)
-            languageView.setEnabled(false);
+            ((ViewManager)languageView.getParent()).removeView(languageView);
         else
             languageView.setText(language);
 
