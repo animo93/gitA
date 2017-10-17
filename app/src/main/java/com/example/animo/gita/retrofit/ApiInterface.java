@@ -26,6 +26,7 @@ import retrofit2.http.Path;
 public interface ApiInterface {
 
     @GET(Constants.REPOSITORIES)
+    @Headers("Accept: application/json")
     Call<List<Repository>> getRepos();
 
     @GET(Constants.COMMITS)

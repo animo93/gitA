@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity{
                                                 startActivity(intent);
                                                 if(!task.isSuccessful()){
                                                     Log.e(LOG_TAG,"Sign in with credential ",task.getException());
-                                                    Toast.makeText(mActivity,"Authentication Failed",Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(mActivity,getResources().getString(R.string.Login_failure),Toast.LENGTH_SHORT).show();
                                                 }
 
                                             }

@@ -25,6 +25,9 @@
     <string name="language">Language</string>
     <string name="favourite">Favourite</string>
     <string name="gita">GITA</string>
+    <string name="Login_failure">Failed To Login into GitHub</string>
+    <string name="string_commitSummary">Showing %1$d changed files with %2$d additions and %3$d deletions</string>
+    <string name="File_type">Files %1$s</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">

@@ -1,7 +1,11 @@
 package com.example.animo.gita.fragments;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +22,7 @@ import com.example.animo.gita.R;
 import com.example.animo.gita.adapter.RepoAdapter;
 import com.example.animo.gita.model.Repository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +33,7 @@ import retrofit2.Response;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements AsyncProcessOutput {
+public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Repository>> {
 
     public static final String LOG_TAG = MainActivityFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
@@ -41,13 +46,36 @@ public class MainActivityFragment extends Fragment implements AsyncProcessOutput
 
     retrofit2.Call<List<Repository>> call = null;
 
+    public static final int REPO_LOADER = 4;
+
 
     public MainActivityFragment() {
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e(LOG_TAG,"inside onResume ");
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        Log.e(LOG_TAG,"inside onActivityCreated");
+        LoaderManager loaderManager = getLoaderManager();
+        Loader<String> loader = loaderManager.getLoader(REPO_LOADER);
+        if(loader==null){
+            loaderManager.initLoader(REPO_LOADER, null, this);
+        }else{
+            loaderManager.restartLoader(REPO_LOADER, null, this);
+        }
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         Log.e(LOG_TAG,"inside onCreateView");
 
         View rootView = inflater.inflate(R.layout.fragment_main,container,false);
@@ -59,7 +87,7 @@ public class MainActivityFragment extends Fragment implements AsyncProcessOutput
 
         repoAdapter = new RepoAdapter(getContext());
         mRecyclerView.setAdapter(repoAdapter);
-        String accessToken = new Utility().getAccessToken(getContext());
+       /* String accessToken = new Utility().getAccessToken(getContext());
         Log.e(LOG_TAG,"Access Token in frag "+accessToken);
         ApiInterface apiService = ApiClient.createService(ApiInterface.class, accessToken);
 
@@ -86,7 +114,9 @@ public class MainActivityFragment extends Fragment implements AsyncProcessOutput
                 }
             });
         }
+*/
 
+       //getActivity().getSupportLoaderManager().initLoader(REPO_LOADER,null,this);
         return rootView;
     }
 
@@ -98,7 +128,60 @@ public class MainActivityFragment extends Fragment implements AsyncProcessOutput
     }
 
     @Override
-    public void onComplete(Object output) {
+    public Loader<List<Repository>> onCreateLoader(int id, Bundle args) {
+        Log.i(LOG_TAG,"inside onCreateLoader");
+        return new AsyncTaskLoader<List<Repository>>(getActivity()) {
+            @Override
+            protected void onStopLoading() {
+                Log.e(LOG_TAG,"inside onStopLoading");
+                super.onStopLoading();
+                cancelLoad();
+            }
+
+            @Override
+            protected void onStartLoading() {
+                Log.e(LOG_TAG,"inside onStartLoading");
+                super.onStartLoading();
+                if(call == null)
+                    forceLoad();
+
+            }
+
+            @Override
+            public List<Repository> loadInBackground() {
+                String accessToken = new Utility().getAccessToken(getContext());
+                Log.e(LOG_TAG,"Access Token in frag "+accessToken);
+                ApiInterface apiService = ApiClient.createService(ApiInterface.class, accessToken);
+                call = apiService.getRepos();
+                try {
+                    Response<List<Repository>> response=call.execute();
+                    repositories = response.body();
+                    if (repositories != null) {
+                        Log.d(LOG_TAG, "Size of repos " + repositories.size());
+                        /*repoAdapter.setRepositoryList(repositories);
+                        repoAdapter.notifyDataSetChanged();*/
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return repositories;
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Repository>> loader, List<Repository> data) {
+        if(data!=null){
+            Log.d(LOG_TAG,"Size of data "+data.size());
+            repoAdapter.setRepositoryList(data);
+            repoAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Repository>> loader) {
+
 
     }
 }

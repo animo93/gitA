@@ -89,13 +89,15 @@ public class CommitDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             CommitDescViewHolder holder0 = (CommitDescViewHolder) holder;
             //holder0.commiterView.setText(commit.getCommitter().getLogin());
             holder0.commitName.setText(commit.getCommit().getMessage());
-            holder0.commitDesc.setText("Showing "+commit.getFiles().size()+" changed files with "+
-                    commit.getStats().getAdditions()+" additions and "+commit.getStats().getDeletions()+" deletions");
+            /*holder0.commitDesc.setText("Showing "+commit.getFiles().size()+" changed files with "+
+                    commit.getStats().getAdditions()+" additions and "+commit.getStats().getDeletions()+" deletions");*/
+            holder0.commitDesc.setText(mContext.getResources().getString(R.string.string_commitSummary,commit.getFiles().size(),commit.getStats().getAdditions(),commit.getStats().getDeletions()));
 
         }else{
             CommitDetailViewHolder holder1 = (CommitDetailViewHolder) holder;
             String key = (String) mapFileList.keySet().toArray()[position-1];
-            holder1.typeView.setText("Files "+ key);
+            /*holder1.typeView.setText("Files "+ key);*/
+            holder1.typeView.setText(mContext.getResources().getString(R.string.File_type,key));
             final List<Files> value = mapFileList.get(key);
             Log.d(LOG_TAG,"Size of "+key+" "+value.size());
 

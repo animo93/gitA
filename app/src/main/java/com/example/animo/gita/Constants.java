@@ -54,4 +54,6 @@ public class Constants {
     public static final String FILES_RENAMED = "renamed";
     public static final String FILES_DELETD = "modified";
     public static final String REPO_DETAIL = "/repos/{user}/{repo}";
+    public static final String REPO_ALREADY_MARKED = "Repo is Already Marked as Favourite";
+    public static final String MARK_REPO_FAVOURITE = "Repo is Marked as Favourite";
 }

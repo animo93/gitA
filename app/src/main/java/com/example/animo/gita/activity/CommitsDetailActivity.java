@@ -71,7 +71,7 @@ public class CommitsDetailActivity extends AppCompatActivity {
         setContentView(R.layout.commit_detail_view_fragment);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("gitA");
+        getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
 
         //initializeView();
         mRecyclerView = (RecyclerView) findViewById(R.id.commit_detail_recycler_view);
@@ -133,8 +133,9 @@ public class CommitsDetailActivity extends AppCompatActivity {
             private void setupViews(Commit commit) {
                 commiterView.setText(commit.getCommitter().getLogin());
                 commitName.setText(commit.getMessage());
-                commitDesc.setText("Showing "+commit.getFiles().size()+" changed files with "+
-                        commit.getStats().getAdditions()+" additions and "+commit.getStats().getDeletions()+" deletions");
+                /*commitDesc.setText("Showing "+commit.getFiles().size()+" changed files with "+
+                        commit.getStats().getAdditions()+" additions and "+commit.getStats().getDeletions()+" deletions");*/
+                commitDesc.setText(getResources().getString(R.string.string_commitSummary,commit.getFiles().size(),commit.getStats().getAdditions(),commit.getStats().getDeletions()));
 
                 setupListViews("added",addedFilesListView,commit);
                 setupListViews("renamed",renamedFilesListView,commit);

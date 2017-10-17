@@ -94,7 +94,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
                 );
                 Log.d(LOG_TAG,"Uri is "+RepoContract.FavRepos.buildRepoUriFromId(String.valueOf(repo.getId())).toString());
                 if(repoCursor.moveToFirst()){
-                    String text="Repo is already marked as favourite";
+                    String text=Constants.REPO_ALREADY_MARKED;
                     int duration=Toast.LENGTH_SHORT;
                     Toast toast=Toast.makeText(view.getContext(),text,duration);
                     toast.show();
@@ -121,7 +121,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
                         Uri insertUri=view.getContext().getContentResolver().insert(RepoContract.FavRepos.CONTENT_URI,repoValues);
                         if(insertUri!=null){
                             Log.d(LOG_TAG,"Repo inserted and Uri is" +insertUri.toString());
-                            String text="Repo is marked as favourite";
+                            String text=Constants.MARK_REPO_FAVOURITE;
                             int duration=Toast.LENGTH_SHORT;
                             Toast toast=Toast.makeText(view.getContext(),text,duration);
                             toast.show();

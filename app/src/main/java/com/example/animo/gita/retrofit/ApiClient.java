@@ -6,6 +6,7 @@ import android.util.Log;
 import com.example.animo.gita.Constants;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Authenticator;
 import okhttp3.CacheControl;
@@ -57,6 +58,7 @@ public class ApiClient {
 
             httpClient.addInterceptor(loggingInterceptor);
             httpClient.retryOnConnectionFailure(false);
+            httpClient.readTimeout(1, TimeUnit.SECONDS);
             builder.client(httpClient.build());
             retrofit = builder.build();
 

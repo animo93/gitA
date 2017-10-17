@@ -6,7 +6,7 @@ android {
         config {
             keyAlias 'gita'
             keyPassword 'solaforce'
-            storeFile file('./keystore.jks')
+            storeFile file('../keystore.jks')
             storePassword 'solaforce'
         }
     }
@@ -53,6 +53,8 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:11.0.0'
     //Firebase AdMob
     compile 'com.google.firebase:firebase-ads:11.0.0'
+    //Firebase Messaging
+    compile 'com.google.firebase:firebase-messaging:11.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

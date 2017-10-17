@@ -30,7 +30,7 @@ public class CommitFileAdapter extends ArrayAdapter<Files> implements View.OnCli
 
     Context mContext;
     List<Files> files;
-    public CommitFileAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Files> objects) {
+    public CommitFileAdapter(@NonNull Context context,  int resource, @NonNull List<Files> objects) {
         super(context, resource, objects);
         mContext=context;
         this.files= objects;

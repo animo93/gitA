@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void loadNavHeader() {
+    /*private void loadNavHeader() {
         txtName.setText("Animo");
         txtWebsite.setText("www.semiti.com");
 
@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
                 .bitmapTransform(new CircleTransform(this))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imgProfile);
-    }
+    }*/
 
     private void loadHomeFragment() {
 
