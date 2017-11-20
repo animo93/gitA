@@ -75,7 +75,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //getSupportActionBar().setIcon(R.drawable.ic_action_name);
+        Intent intent = getIntent();
+        /*Log.d(LOG_TAG,"Access token "+intent.getStringExtra("access_token"));
 
+        Bundle args = new Bundle();
+        args.putString("access_token",intent.getStringExtra("access_token"));*/
+
+        MainActivityFragment mainActivityFragment = new MainActivityFragment();
+        //mainActivityFragment.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.content_frame,mainActivityFragment,"home")
+                .commit();
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -293,8 +305,8 @@ public class MainActivity extends AppCompatActivity {
         switch (navItemIndex) {
             case 0:
                 //home
-                MainActivityFragment mainActivityFragment = new MainActivityFragment();
-                return mainActivityFragment;
+               /* MainActivityFragment mainActivityFragment = new MainActivityFragment();
+                return mainActivityFragment;*/
             case 1:
                 // photos
                 /*PhotosFragment photosFragment = new PhotosFragment();
@@ -358,13 +370,14 @@ public class MainActivity extends AppCompatActivity {
             FirebaseAuth auth = FirebaseAuth.getInstance();
             if(auth!=null){
                 auth.signOut();
-                finish();
+
                 //startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(
                         getBaseContext().getPackageName()
                 );
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                //finishAndRemoveTask();
             }
             return true;
         }

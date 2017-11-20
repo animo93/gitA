@@ -16,15 +16,20 @@ import android.widget.Toast;
 
 import com.example.animo.gita.Constants;
 import com.example.animo.gita.R;
+import com.example.animo.gita.Utility;
 import com.example.animo.gita.activity.ReposDetailActivity;
 import com.example.animo.gita.data.RepoContract;
 import com.example.animo.gita.model.Event;
+import com.example.animo.gita.model.RepoRegister;
+import com.example.animo.gita.model.RepoRegisterOutput;
 import com.example.animo.gita.model.Repository;
 import com.example.animo.gita.retrofit.ApiClient;
 import com.example.animo.gita.retrofit.ApiInterface;
+import com.example.animo.gita.retrofit.NotificationClient;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -100,26 +105,28 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
                     toast.show();
                     return;
                 }
-                ApiInterface apiService = ApiClient.createService(ApiInterface.class,null);
+                ApiInterface apiService = NotificationClient.createService(ApiInterface.class,null);
                 Log.d(LOG_TAG,"Onwer "+repo.getOwner().getLogin()+" and repo "+repo.getName());
-                Call<List<Event>> call = apiService.getEventTag(repo.getOwner().getLogin(),repo.getName());
-                call.enqueue(new Callback<List<Event>>() {
+                //Call<List<Event>> call = apiService.getEventTag(repo.getOwner().getLogin(),repo.getName());
+
+                Call<RepoRegisterOutput> call = apiService.registerFavRepo(new RepoRegister(new Utility().getRegToken(mContext),repositoryList.get(position).getId().toString()));
+                call.enqueue(new Callback<RepoRegisterOutput>() {
                     @Override
-                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                    public void onResponse(Call<RepoRegisterOutput> call, Response<RepoRegisterOutput> response) {
                         Log.i(LOG_TAG,"inside onResponse");
-                        String eTag = response.headers().get(Constants.ETAG);
-                        eTag = eTag.split("\"")[1];
-                        String lastModified = response.headers().get(Constants.LAST_MODIFIED);
-                        Log.d(LOG_TAG,"eTag of repo "+repo.getName()+" is "+eTag+" and last modified "+lastModified);
+                        /*String eTag = response.headers().get(Constants.ETAG);
+                        eTag = eTag.split("\"")[1];*/
+                        //String lastModified = response.headers().get(Constants.LAST_MODIFIED);
+                        //Log.d(LOG_TAG,"eTag of repo "+repo.getName()+" is "+eTag+" and last modified "+lastModified);
                         ContentValues repoValues = new ContentValues();
-                        repoValues.put(RepoContract.FavRepos.COLUMN_ETAG,eTag);
+                        //repoValues.put(RepoContract.FavRepos.COLUMN_ETAG,eTag);
                         repoValues.put(RepoContract.FavRepos.COLUMN_REPO_ID,repo.getId());
                         repoValues.put(RepoContract.FavRepos.COLUMN_REPO_OWNER,repo.getOwner().getLogin());
                         repoValues.put(RepoContract.FavRepos.COLUMN_TITLE,repo.getName());
-                        repoValues.put(RepoContract.FavRepos.COLUMN_UPDATED_DATE,lastModified);
+                        //repoValues.put(RepoContract.FavRepos.COLUMN_UPDATED_DATE,lastModified);
 
                         Uri insertUri=view.getContext().getContentResolver().insert(RepoContract.FavRepos.CONTENT_URI,repoValues);
-                        if(insertUri!=null){
+                        if(insertUri!=null && response.code() == 200){
                             Log.d(LOG_TAG,"Repo inserted and Uri is" +insertUri.toString());
                             String text=Constants.MARK_REPO_FAVOURITE;
                             int duration=Toast.LENGTH_SHORT;
@@ -131,7 +138,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
                     }
 
                     @Override
-                    public void onFailure(Call<List<Event>> call, Throwable t) {
+                    public void onFailure(Call<RepoRegisterOutput> call, Throwable t) {
                         Log.e(LOG_TAG,"Could not insert favourite repos ");
                         t.printStackTrace();
 

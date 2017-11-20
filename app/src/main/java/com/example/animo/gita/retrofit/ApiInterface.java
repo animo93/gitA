@@ -6,11 +6,16 @@ import com.example.animo.gita.model.Commit;
 import com.example.animo.gita.model.Event;
 import com.example.animo.gita.model.Files;
 import com.example.animo.gita.model.RepoCommit;
+import com.example.animo.gita.model.RepoRegister;
+import com.example.animo.gita.model.RepoRegisterOutput;
 import com.example.animo.gita.model.Repository;
 
 import java.util.List;
+import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -59,6 +64,10 @@ public interface ApiInterface {
     @GET(Constants.REPO_DETAIL)
     Call<Repository> getRepoDetail(@Path("user") String user,
                                    @Path("repo") String repo);
+
+    @POST(Constants.REGISTER_REPO)
+    @Headers("Accept: application/json")
+    Call<RepoRegisterOutput> registerFavRepo(@Body RepoRegister repoRegister);
 
 
 

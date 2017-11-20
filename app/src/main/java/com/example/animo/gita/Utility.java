@@ -14,4 +14,10 @@ public class Utility {
         String authToken = sharedPreferences.getString(mContext.getString(R.string.access_token),null);
         return authToken;
     }
+
+    public String getRegToken(Context mContext){
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
+        String regToken = sharedPreferences.getString("reg_token",null);
+        return regToken;
+    }
 }

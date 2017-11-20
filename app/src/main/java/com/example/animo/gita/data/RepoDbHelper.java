@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class RepoDbHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     static final String DATABASE_NAME = "repos.db";
     public RepoDbHelper(Context context) {
@@ -23,7 +23,7 @@ public class RepoDbHelper extends SQLiteOpenHelper {
 
                 RepoContract.FavRepos.COLUMN_REPO_ID + " TEXT NOT NULL, "+
                 RepoContract.FavRepos.COLUMN_TITLE + " TEXT NOT NULL, " +
-                RepoContract.FavRepos.COLUMN_ETAG + " TEXT NOT NULL, " +
+                RepoContract.FavRepos.COLUMN_ETAG + " TEXT, " +
                 RepoContract.FavRepos.COLUMN_REPO_OWNER + " TEXT NOT NULL, " +
                 RepoContract.FavRepos.COLUMN_UPDATED_DATE + " TEXT " +
                 " );";

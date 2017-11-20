@@ -42,6 +42,9 @@ public class LoginActivity extends AppCompatActivity{
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
     private FirebaseAuth mAuth;
     private Activity mActivity;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
+    private static final int RC_SIGN_IN = 1;
 
     public LoginActivity(){
         Log.i(LOG_TAG,"inside Constructor");
@@ -59,64 +62,9 @@ public class LoginActivity extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
         Log.i(LOG_TAG,"inside onResume");
-        Uri uri = getIntent().getData();
-        Log.d(LOG_TAG,"uri is "+uri);
-        if(uri != null && uri.toString().startsWith(Constants.REDIRECT_URL)){
-            String code = uri.getQueryParameter(Constants.AUTH_CODE);
-            String state = uri.getQueryParameter(Constants.AUTH_STATE);
-            Log.d(LOG_TAG,"Returned State "+state);
-            if(!state.equals(Constants.RANDOM_CODE)){
-                Log.e(LOG_TAG,"It is a forgery attack ....Stopping");
-                return;
-            }
-            if(code!= null){
-                ApiInterface apiService = ApiClient.createService(ApiInterface.class,null);
-                Call<Access> call = apiService.getAccessToken(code,getResources().getString(R.string.client_id),getResources().getString(R.string.client_secret));
-                call.enqueue(new Callback<Access>() {
-                    @Override
-                    public void onResponse(Call<Access> call, Response<Access> response) {
-                        if(response!=null){
-                            if(response.body()!=null){
-                                Access access = response.body();
-                                final String accessToken = access.getAccess_token();
-                                AuthCredential credential = GithubAuthProvider.getCredential(accessToken);
-                                mAuth.signInWithCredential(credential)
-                                        .addOnCompleteListener(mActivity, new OnCompleteListener<AuthResult>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                                Log.d(LOG_TAG,"Sign in with credential "+task.isSuccessful());
-                                                saveToSharedPreference(getString(R.string.access_token),accessToken);
-                                                /*Intent intent = new Intent(mActivity,MainActivity.class);
-                                                startActivity(intent);*/
-                                                finish();
-                                                Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(
-                                                        getBaseContext().getPackageName()
-                                                );
-                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(intent);
-                                                if(!task.isSuccessful()){
-                                                    Log.e(LOG_TAG,"Sign in with credential ",task.getException());
-                                                    Toast.makeText(mActivity,getResources().getString(R.string.Login_failure),Toast.LENGTH_SHORT).show();
-                                                }
+        mAuth.addAuthStateListener(mAuthStateListener);
 
-                                            }
-                                        });
-                            }
-                        }
 
-                    }
-
-                    @Override
-                    public void onFailure(Call<Access> call, Throwable t) {
-                        Log.e(LOG_TAG,"unable to get access token....Try Again"+t.toString());
-
-                    }
-                });
-
-            }else {
-                Log.e(LOG_TAG,"Unable to authorize ....PLease try again");
-            }
-        }
     }
 
     private void saveToSharedPreference(String key ,String value) {
@@ -142,12 +90,35 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signin);
+        //setContentView(R.layout.activity_signin);
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
 
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                if(currentUser!=null){
+                    Log.d(LOG_TAG,"Current user is "+currentUser.getDisplayName());
+                    finish();
+                    Intent intent = new Intent(mActivity,MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+            }
+        };
+
+        /*FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser!=null){
+            Log.d(LOG_TAG,"Current user is "+currentUser.getDisplayName());
+            finish();
+            Intent intent = new Intent(this,MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }*/
+        setContentView(R.layout.activity_signin);
         Button button = (Button) findViewById(R.id.button_signin);
-        Log.d(LOG_TAG,"Random string is "+Constants.RANDOM_CODE);
+        //Log.d(LOG_TAG,"Random string is "+Constants.RANDOM_CODE);
         final Uri buildUri = Uri.parse(Constants.OATH2_URL).buildUpon()
                 .appendQueryParameter("client_id",getResources().getString(R.string.client_id))
                 .appendQueryParameter(Constants.AUTH_STATE,Constants.RANDOM_CODE)
@@ -156,12 +127,17 @@ public class LoginActivity extends AppCompatActivity{
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(
+                /*Intent intent = new Intent(
                         Intent.ACTION_VIEW,
                         buildUri
-                );
+                );*/
+                Intent intent = new Intent(mActivity,OAuthLoginActivity.class);
+                intent.putExtra(Constants.URL,buildUri.toString());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                //startActivityForResult(intent,RC_SIGN_IN);
                 startActivity(intent);
+                //startActivityForResult(intent,RC_SIGN_IN);
+                finish();
             }
         });
     }
@@ -172,5 +148,160 @@ public class LoginActivity extends AppCompatActivity{
         for(int i=0;i<8;++i)
             sb.append(Constants.ALLOWED_CHARACTERS.charAt(random.nextInt(Constants.ALLOWED_CHARACTERS.length())));
         return sb.toString();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        Log.i(LOG_TAG,"inside finish");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mAuthStateListener != null)
+            mAuth.removeAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(LOG_TAG,"inside onActivityResult");
+        //Log.d(LOG_TAG,"request code "+requestCode+" resultCode "+resultCode+"data "+data.getStringExtra("token"));
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser!=null){
+            Log.d(LOG_TAG,"Current user is "+currentUser.getDisplayName());
+            finish();
+            Intent intent = new Intent(this,MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }else{
+            authenticateUri(data.getStringExtra("token"));
+        }
+/*        if(requestCode == RC_SIGN_IN){
+            Log.d(LOG_TAG,"Result code "+resultCode);
+            Uri uri = data.getData();
+            Log.d(LOG_TAG,"uri is "+uri);
+            if(uri != null && uri.toString().startsWith(Constants.REDIRECT_URL)){
+                String code = uri.getQueryParameter(Constants.AUTH_CODE);
+                String state = uri.getQueryParameter(Constants.AUTH_STATE);
+                Log.d(LOG_TAG,"Returned State "+state);
+                if(!state.equals(Constants.RANDOM_CODE)){
+                    Log.e(LOG_TAG,"It is a forgery attack ....Stopping");
+                    return;
+                }
+                if(code!= null){
+                    ApiInterface apiService = ApiClient.createService(ApiInterface.class,null);
+                    Call<Access> call = apiService.getAccessToken(code,getResources().getString(R.string.client_id),getResources().getString(R.string.client_secret));
+                    call.enqueue(new Callback<Access>() {
+                        @Override
+                        public void onResponse(Call<Access> call, Response<Access> response) {
+                            if(response!=null){
+                                if(response.body()!=null){
+                                    Access access = response.body();
+                                    final String accessToken = access.getAccess_token();
+                                    AuthCredential credential = GithubAuthProvider.getCredential(accessToken);
+                                    mAuth.signInWithCredential(credential)
+                                            .addOnCompleteListener(mActivity, new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                    Log.d(LOG_TAG,"Sign in with credential "+task.isSuccessful());
+                                                    saveToSharedPreference(getString(R.string.access_token),accessToken);
+                                                *//*Intent intent = new Intent(mActivity,MainActivity.class);
+                                                startActivity(intent);*//*
+                                                    finish();
+                                                    Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(
+                                                            getBaseContext().getPackageName()
+                                                    );
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(intent);
+                                                    if(!task.isSuccessful()){
+                                                        Log.e(LOG_TAG,"Sign in with credential ",task.getException());
+                                                        Toast.makeText(mActivity,getResources().getString(R.string.Login_failure),Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                }
+                                            });
+                                }
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<Access> call, Throwable t) {
+                            Log.e(LOG_TAG,"unable to get access token....Try Again"+t.toString());
+
+                        }
+                    });
+
+                }else {
+                    Log.e(LOG_TAG,"Unable to authorize ....PLease try again");
+                }
+            }
+
+        }*/
+    }
+
+    private void authenticateUri(String url) {
+        Uri uri = Uri.parse(url);
+        if(uri != null && uri.toString().startsWith(Constants.REDIRECT_URL)){
+            String code = uri.getQueryParameter(Constants.AUTH_CODE);
+            String state = uri.getQueryParameter(Constants.AUTH_STATE);
+            //Log.d(LOG_TAG,"Returned State "+state);
+            if(!state.equals(Constants.RANDOM_CODE)){
+                Log.e(LOG_TAG,"It is a forgery attack ....Stopping");
+                return;
+            }
+            if(code!= null){
+                ApiInterface apiService = ApiClient.createService(ApiInterface.class,null);
+                Call<Access> call = apiService.getAccessToken(code,getResources().getString(R.string.client_id),getResources().getString(R.string.client_secret));
+                call.enqueue(new Callback<Access>() {
+                    @Override
+                    public void onResponse(Call<Access> call, Response<Access> response) {
+                        if(response!=null){
+                            if(response.body()!=null){
+                                Access access = response.body();
+                                final String accessToken = access.getAccess_token();
+                                AuthCredential credential = GithubAuthProvider.getCredential(accessToken);
+                                mAuth.signInWithCredential(credential)
+                                        .addOnCompleteListener(mActivity, new OnCompleteListener<AuthResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                                Log.d(LOG_TAG,"Sign in with credential "+task.isSuccessful());
+                                                saveToSharedPreference(getString(R.string.access_token),accessToken);
+                                                Intent intent = new Intent(mActivity,MainActivity.class);
+                                                intent.putExtra("access_token",accessToken);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                //startActivityForResult(intent,RC_SIGN_IN);
+                                                startActivity(intent);
+                                                finish();
+                                                /*Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(
+                                                        getBaseContext().getPackageName()
+                                                );
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(intent);*/
+                                                if(!task.isSuccessful()){
+                                                    Log.e(LOG_TAG,"Sign in with credential ",task.getException());
+                                                    Toast.makeText(mActivity,getResources().getString(R.string.Login_failure),Toast.LENGTH_SHORT).show();
+                                                }
+
+                                            }
+                                        });
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Access> call, Throwable t) {
+                        Log.e(LOG_TAG,"unable to get access token....Try Again"+t.toString());
+
+                    }
+                });
+
+            }else {
+                Log.e(LOG_TAG,"Unable to authorize ....PLease try again");
+            }
+        }
     }
 }

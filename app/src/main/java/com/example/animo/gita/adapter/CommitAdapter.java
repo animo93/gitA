@@ -85,14 +85,25 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitAdap
     public void onBindViewHolder(CommitAdapterViewHolder holder, final int position) {
 
         holder.titleView.setText(repoCommitList.get(position).getCommit().getMessage());
-        String name = repoCommitList.get(position).getAuthor().getLogin();
+        String name = (repoCommitList.get(position).getAuthor()!=null) ?
+                repoCommitList.get(position).getAuthor().getLogin() :
+                repoCommitList.get(position).getCommit().getCommitter().getName();
         String dateString = repoCommitList.get(position).getCommit().getCommitter().getDate();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Glide.with(mContext).load(repoCommitList.get(position).getAuthor().getAvatar_url())
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                //.override(100,100)
-                .into(holder.imageView);
+        if(repoCommitList.get(position).getAuthor() == null){
+            Glide.with(mContext).load(R.drawable.github_logo)
+                    .crossFade()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    //.override(100,100)
+                    .into(holder.imageView);
+        }else{
+            Glide.with(mContext).load(repoCommitList.get(position).getAuthor().getAvatar_url())
+                    .crossFade()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    //.override(100,100)
+                    .into(holder.imageView);
+        }
+
         long days = 0;
         try {
             Date date = sdf.parse(dateString);

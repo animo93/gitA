@@ -56,4 +56,6 @@ public class Constants {
     public static final String REPO_DETAIL = "/repos/{user}/{repo}";
     public static final String REPO_ALREADY_MARKED = "Repo is Already Marked as Favourite";
     public static final String MARK_REPO_FAVOURITE = "Repo is Marked as Favourite";
+    public static final String REGISTER_REPO = "/register_device";
+    public static final String NOTIF_ROOT_URL = "https://gitanotif.herokuapp.com/";
 }

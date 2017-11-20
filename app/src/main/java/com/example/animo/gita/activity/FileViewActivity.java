@@ -14,7 +14,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 /**
- * Created by animo on 24/5/17.
+ * Created by animo on 10/11/17.
  */
 
 public class FileViewActivity extends AppCompatActivity {
@@ -40,7 +40,7 @@ public class FileViewActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         String title = intent.getStringExtra(Constants.TITLE);
-        Log.d(LOG_TAG,"Title is "+title);
+        Log.d(LOG_TAG, "Title is " + title);
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -53,6 +53,5 @@ public class FileViewActivity extends AppCompatActivity {
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-
     }
 }
