@@ -27,12 +27,14 @@ public class RepoContract {
         public static final String COLUMN_ETAG = "etag";
         public static final String COLUMN_REPO_OWNER = "owner";
         public static final String COLUMN_UPDATED_DATE = "updated_date";
+        public static final String COLUMN_HOOK_ID="hook_id";
 
         public static final int COL_ID=0;
         public static final int COL_REPO_TITLE=1;
         public static final int COL_REPO_ID=2;
         public static final int COL_REPO_OWNER_ID=3;
         public static final int COL_ETAG_ID=4;
+        public static final int COL_HOOK_ID=5;
 
 
         public static final String[] REPO_COLUMNS = {
@@ -40,7 +42,8 @@ public class RepoContract {
                 RepoContract.FavRepos.COLUMN_TITLE ,
                 RepoContract.FavRepos.COLUMN_REPO_ID,
                 RepoContract.FavRepos.COLUMN_REPO_OWNER,
-                RepoContract.FavRepos.COLUMN_ETAG
+                RepoContract.FavRepos.COLUMN_ETAG,
+                FavRepos.COLUMN_HOOK_ID
         };
 
         public static final String CONTENT_TYPE=

@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ import android.widget.Toast;
 
 import com.example.animo.gita.Constants;
 import com.example.animo.gita.R;
+import com.example.animo.gita.Utility;
 import com.example.animo.gita.model.Access;
 import com.example.animo.gita.retrofit.ApiClient;
 import com.example.animo.gita.retrofit.ApiInterface;
@@ -147,11 +150,14 @@ public class OAuthLoginActivity extends AppCompatActivity {
                         //mWebView.stopLoading();
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                         ProgressDialog progressBar = new ProgressDialog(mActivity);
-                        progressBar.setCancelable(false);
-                        progressBar.setMessage("Logging you in ...");
                         progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        progressBar.setCancelable(false);
+                        progressBar.setMessage("Logging you in.....");
+                        progressBar.getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
+                        //progressBar.setIndeterminate(false);
                         //progressBar.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                         progressBar.show();
+                        //progressBar.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                         authenticateUri(url);
                     }
                 }
@@ -165,6 +171,7 @@ public class OAuthLoginActivity extends AppCompatActivity {
                 //return super.shouldOverrideUrlLoading(view, request);
                 return false;
             }
+
         });
 
 
@@ -186,7 +193,10 @@ public class OAuthLoginActivity extends AppCompatActivity {
             }
             if(code!= null){
                 ApiInterface apiService = ApiClient.createService(ApiInterface.class,null);
-                Call<Access> call = apiService.getAccessToken(code,getResources().getString(R.string.client_id),getResources().getString(R.string.client_secret));
+                String clientId = new Utility().getClientId(mActivity);
+                String clientKey = new Utility().getClientSecret(mActivity);
+                Log.e(LOG_TAG,"Client id= "+clientId+" and key "+clientKey);
+                Call<Access> call = apiService.getAccessToken(code,clientId,clientKey);
                 call.enqueue(new Callback<Access>() {
                     @Override
                     public void onResponse(Call<Access> call, Response<Access> response) {
@@ -204,14 +214,8 @@ public class OAuthLoginActivity extends AppCompatActivity {
                                                 Intent intent = new Intent(mActivity,MainActivity.class);
                                                 intent.putExtra("access_token",accessToken);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                //startActivityForResult(intent,RC_SIGN_IN);
                                                 startActivity(intent);
                                                 finish();
-                                                /*Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(
-                                                        getBaseContext().getPackageName()
-                                                );
-                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(intent);*/
                                                 if(!task.isSuccessful()){
                                                     Log.e(LOG_TAG,"Sign in with credential ",task.getException());
                                                     Toast.makeText(mActivity,getResources().getString(R.string.Login_failure),Toast.LENGTH_SHORT).show();

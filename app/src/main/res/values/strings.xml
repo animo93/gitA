@@ -28,6 +28,12 @@
     <string name="Login_failure">Failed To Login into GitHub</string>
     <string name="string_commitSummary">Showing %1$d changed files with %2$d additions and %3$d deletions</string>
     <string name="File_type">Files %1$s</string>
+    <string name="dialog_title">Mark As Favourite</string>
+    <string name="unmark_favourite_message">You will stop receiving notifications for this repo . Do you want to proceed ?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="mark_favourite_message">Choose Events for getting Notified</string>
+    <string name="unmark_dialog_title">Unmark As Favourite</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">

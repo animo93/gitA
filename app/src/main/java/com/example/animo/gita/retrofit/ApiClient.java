@@ -41,7 +41,6 @@ public class ApiClient {
     public static <S> S createService(Class<S> serviceClass , final String authToken) {
 
         if(!TextUtils.isEmpty(authToken)) {
-            Log.e(ApiClient.class.getSimpleName(),"authToken is "+authToken);
 
             Interceptor interceptor = new Interceptor() {
                 @Override

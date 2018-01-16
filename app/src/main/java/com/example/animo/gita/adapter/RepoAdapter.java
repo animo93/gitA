@@ -5,31 +5,39 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.animo.gita.Constants;
 import com.example.animo.gita.R;
 import com.example.animo.gita.Utility;
+import com.example.animo.gita.activity.MainActivity;
 import com.example.animo.gita.activity.ReposDetailActivity;
 import com.example.animo.gita.data.RepoContract;
-import com.example.animo.gita.model.Event;
+import com.example.animo.gita.fragments.MarkFavouriteDialogFragment;
+import com.example.animo.gita.fragments.UnmarkFavouriteDialogFragment;
+import com.example.animo.gita.model.Config;
 import com.example.animo.gita.model.RepoRegister;
 import com.example.animo.gita.model.RepoRegisterOutput;
 import com.example.animo.gita.model.Repository;
+import com.example.animo.gita.model.WebHookRegister;
 import com.example.animo.gita.retrofit.ApiClient;
 import com.example.animo.gita.retrofit.ApiInterface;
 import com.example.animo.gita.retrofit.NotificationClient;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,7 +46,8 @@ import retrofit2.Response;
  * Created by animo on 8/5/17.
  */
 
-public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterViewHolder> {
+public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterViewHolder>
+        {
 
     private static final String LOG_TAG = RepoAdapter.class.getSimpleName();
 
@@ -49,6 +58,10 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
     Repository repository;
 
     String sourceId;
+
+    CompoundButton mCompoundButton;
+
+    int mPosition;
 
     public List<Repository> getRepositoryList() {
         return repositoryList;
@@ -85,68 +98,48 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
         holder.forkView.setText(String.valueOf(repositoryList.get(position).getForks()));
         holder.languageView.setText(repositoryList.get(position).getLanguage());
         holder.urlView.setText(repositoryList.get(position).getUrl());
+        boolean isChecked = false;
+
+        Cursor repoCursor = holder.mView.getContext().getContentResolver().query(
+                RepoContract.FavRepos.buildRepoUriFromId(String.valueOf(repositoryList.get(position).getId())),
+                new String[]{RepoContract.FavRepos.TABLE_NAME+"."+RepoContract.FavRepos._ID},
+                null,
+                null,
+                null
+        );
+        if(repoCursor.moveToFirst()){
+            isChecked=true;
+        }
+        holder.favouriteButton.setChecked(isChecked);
 
         holder.favouriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(final View view) {
-                final Repository repo = repositoryList.get(position);
-                Cursor repoCursor = view.getContext().getContentResolver().query(
-                        RepoContract.FavRepos.buildRepoUriFromId(String.valueOf(repo.getId())),
-                        new String[]{RepoContract.FavRepos.TABLE_NAME+"."+RepoContract.FavRepos._ID},
-                        null,
-                        null,
-                        null
-                );
-                Log.d(LOG_TAG,"Uri is "+RepoContract.FavRepos.buildRepoUriFromId(String.valueOf(repo.getId())).toString());
-                if(repoCursor.moveToFirst()){
-                    String text=Constants.REPO_ALREADY_MARKED;
-                    int duration=Toast.LENGTH_SHORT;
-                    Toast toast=Toast.makeText(view.getContext(),text,duration);
-                    toast.show();
-                    return;
+            public void onClick(View view) {
+                mPosition = position;
+                mCompoundButton = (CompoundButton) view;
+
+                if(!mCompoundButton.isChecked()){
+                    UnmarkFavouriteDialogFragment dialogFragment = new UnmarkFavouriteDialogFragment();
+                    String repoJson = new Gson().toJson(repositoryList.get(position));
+                    Bundle bundle = new Bundle();
+                    bundle.putString("repoJson",repoJson);
+                    dialogFragment.setArguments(bundle);
+                    MainActivity mainActivity = (MainActivity) mContext;
+                    dialogFragment.show(mainActivity.getSupportFragmentManager(),"unmark_favourite_dialog");
+
+                }else{
+                    MarkFavouriteDialogFragment dialogFragment = new MarkFavouriteDialogFragment();
+                    String repoJson = new Gson().toJson(repositoryList.get(position));
+                    Bundle bundle = new Bundle();
+                    bundle.putString("repoJson",repoJson);
+                    dialogFragment.setArguments(bundle);
+                    MainActivity mainActivity = (MainActivity) mContext;
+                    dialogFragment.show(mainActivity.getSupportFragmentManager(),"mark_favourite_dialog");
+
                 }
-                ApiInterface apiService = NotificationClient.createService(ApiInterface.class,null);
-                Log.d(LOG_TAG,"Onwer "+repo.getOwner().getLogin()+" and repo "+repo.getName());
-                //Call<List<Event>> call = apiService.getEventTag(repo.getOwner().getLogin(),repo.getName());
-
-                Call<RepoRegisterOutput> call = apiService.registerFavRepo(new RepoRegister(new Utility().getRegToken(mContext),repositoryList.get(position).getId().toString()));
-                call.enqueue(new Callback<RepoRegisterOutput>() {
-                    @Override
-                    public void onResponse(Call<RepoRegisterOutput> call, Response<RepoRegisterOutput> response) {
-                        Log.i(LOG_TAG,"inside onResponse");
-                        /*String eTag = response.headers().get(Constants.ETAG);
-                        eTag = eTag.split("\"")[1];*/
-                        //String lastModified = response.headers().get(Constants.LAST_MODIFIED);
-                        //Log.d(LOG_TAG,"eTag of repo "+repo.getName()+" is "+eTag+" and last modified "+lastModified);
-                        ContentValues repoValues = new ContentValues();
-                        //repoValues.put(RepoContract.FavRepos.COLUMN_ETAG,eTag);
-                        repoValues.put(RepoContract.FavRepos.COLUMN_REPO_ID,repo.getId());
-                        repoValues.put(RepoContract.FavRepos.COLUMN_REPO_OWNER,repo.getOwner().getLogin());
-                        repoValues.put(RepoContract.FavRepos.COLUMN_TITLE,repo.getName());
-                        //repoValues.put(RepoContract.FavRepos.COLUMN_UPDATED_DATE,lastModified);
-
-                        Uri insertUri=view.getContext().getContentResolver().insert(RepoContract.FavRepos.CONTENT_URI,repoValues);
-                        if(insertUri!=null && response.code() == 200){
-                            Log.d(LOG_TAG,"Repo inserted and Uri is" +insertUri.toString());
-                            String text=Constants.MARK_REPO_FAVOURITE;
-                            int duration=Toast.LENGTH_SHORT;
-                            Toast toast=Toast.makeText(view.getContext(),text,duration);
-                            toast.show();
-                        }
-
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<RepoRegisterOutput> call, Throwable t) {
-                        Log.e(LOG_TAG,"Could not insert favourite repos ");
-                        t.printStackTrace();
-
-                    }
-                });
-
             }
         });
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -192,17 +185,37 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
 
     }
 
+    private WebHookRegister createWebHookPayload(List<Integer> mSelectedItems) {
+        WebHookRegister webHookRegister = new WebHookRegister();
+        webHookRegister.setActive(true);
+        webHookRegister.setName("web");
+        Config config = new Config();
+        config.setContent_type("json");
+        config.setUrl(Constants.NOTIF_ROOT_URL+Constants.WEBHOOK_URL);
+        webHookRegister.setConfig(config);
+        List<String> eventList = new ArrayList<>();
+        String[] events = mContext.getResources().getStringArray(R.array.favourite_events);
+        for(Integer i:mSelectedItems){
+            eventList.add(events[i]);
+        }
+        //eventList.add("push");
+        webHookRegister.setEvents(eventList);
+
+        return webHookRegister;
+    }
+
     @Override
     public int getItemCount() {
         return repositoryList==null?0:repositoryList.size();
     }
+
 
     public class RepoAdapterViewHolder extends RecyclerView.ViewHolder {
         public final TextView titleView;
         public final TextView urlView;
         public final TextView forkView;
         public final TextView languageView;
-        public final Button favouriteButton;
+        public final SwitchCompat favouriteButton;
         public final View mView;
 
 
@@ -213,7 +226,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
             urlView = (TextView) itemView.findViewById(R.id.url);
             forkView = (TextView) itemView.findViewById(R.id.forks);
             languageView = (TextView) itemView.findViewById(R.id.language);
-            favouriteButton = (Button) itemView.findViewById(R.id.fav_button);
+            favouriteButton = (SwitchCompat) itemView.findViewById(R.id.fav_button);
         }
 
     }

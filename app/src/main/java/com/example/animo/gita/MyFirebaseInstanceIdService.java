@@ -23,6 +23,5 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("reg_token",refreshedToken);
         editor.commit();
-        Log.d(TAG, "Firebase Token "+refreshedToken);
     }
 }

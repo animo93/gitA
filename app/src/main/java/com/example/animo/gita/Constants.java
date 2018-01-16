@@ -57,5 +57,15 @@ public class Constants {
     public static final String REPO_ALREADY_MARKED = "Repo is Already Marked as Favourite";
     public static final String MARK_REPO_FAVOURITE = "Repo is Marked as Favourite";
     public static final String REGISTER_REPO = "/register_device";
-    public static final String NOTIF_ROOT_URL = "https://gitanotif.herokuapp.com/";
+    public static final String NOTIF_ROOT_URL = "https://gitanotif.herokuapp.com";
+    public static final String REGISTER_WEBHOOK = "/repos/{user}/{repo}/hooks";
+    public static final String WEBHOOK_URL = "/send";
+    public static final String DEREGISTER_WEBHOOK = "/repos/{user}/{repo}/hooks/{id}";
+    public static final String DEREGISTER_REPO = "/de_register_device";
+    public static final String UNMARK_REPO_FAVOURITE_SUCCESS = "Repo is UnMarked as Favourite";
+    public static final String SERVER_UNREACHABLE = "Server is unreachable";
+    public static final String PATCH_WEBHOOK = "/repos/{user}/{repo}/hooks/{id}";
+    public static final String GET_WEBHOOKS = "/repos/{user}/{repo}/hooks";
+    public static final int RETRY_COUNT = 10;
+    public static final String FETCH_KEYS = "/fetch_keys";
 }

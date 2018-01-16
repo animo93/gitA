@@ -6,6 +6,15 @@ package com.example.animo.gita.model;
 
 public class RepoRegisterOutput {
     private String success;
+    private String error;
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
 
     public String getSuccess() {
         return success;
