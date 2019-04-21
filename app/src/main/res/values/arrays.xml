@@ -2,6 +2,5 @@
 <resources>
     <string-array name="favourite_events">
         <item>push</item>
-        <item>pull_request</item>
     </string-array>
 </resources>

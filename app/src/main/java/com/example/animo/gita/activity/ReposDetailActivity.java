@@ -7,7 +7,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.example.animo.gita.Constants;
 import com.example.animo.gita.R;
@@ -27,12 +26,12 @@ public class ReposDetailActivity extends AppCompatActivity{
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.i(LOG_TAG,"Inside onSaveInstanceState");
+        //Log.i(LOG_TAG,"Inside onSaveInstanceState");
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.i(LOG_TAG,"Inside onCreate");
+        //Log.i(LOG_TAG,"Inside onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.repo_detail);
 
@@ -45,7 +44,7 @@ public class ReposDetailActivity extends AppCompatActivity{
         final String path = intent.getStringExtra(Constants.PATH);
         final String title = intent.getStringExtra(Constants.TITLE);
         final String sourceId = intent.getStringExtra(Constants.SOURCE);
-        Log.e(LOG_TAG,"source is "+sourceId);
+        //Log.e(LOG_TAG,"source is "+sourceId);
         final String desc = intent.getStringExtra(Constants.DESC);
         final String language = intent.getStringExtra(Constants.LANG);
         final int issueCount = intent.getIntExtra(Constants.ISSUE_COUNT,0);

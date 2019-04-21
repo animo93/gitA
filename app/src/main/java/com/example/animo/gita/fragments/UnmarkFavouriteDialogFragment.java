@@ -6,10 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -25,14 +23,7 @@ import com.example.animo.gita.data.RepoContract;
 import com.example.animo.gita.model.RepoRegister;
 import com.example.animo.gita.model.RepoRegisterOutput;
 import com.example.animo.gita.model.Repository;
-import com.example.animo.gita.retrofit.ApiClient;
-import com.example.animo.gita.retrofit.ApiInterface;
-import com.example.animo.gita.retrofit.NotificationClient;
 import com.google.gson.Gson;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by animo on 6/12/17.
@@ -98,7 +89,7 @@ public class UnmarkFavouriteDialogFragment extends DialogFragment {
                     myCall.callMeNow(new MyCallBack<Void, Void>() {
                         @Override
                         public void callBackOnSuccess(MyCall<Void, Void> myCall) {
-                            Log.i(LOG_TAG,"inside onResponse of WebhookCallback");
+                            //Log.i(LOG_TAG,"inside onResponse of WebhookCallback");
 
                             //if response code is deleted or not found
                             if(myCall.getResponseCode() == 204 || myCall.getResponseCode() == 404){
@@ -112,7 +103,7 @@ public class UnmarkFavouriteDialogFragment extends DialogFragment {
                                                 RepoContract.FavRepos.COLUMN_REPO_ID + "=?",
                                                 new String[]{repo.getId().toString()}
                                         );
-                                        Log.d(LOG_TAG,"deleted Rows "+deletedRows);
+                                        //Log.d(LOG_TAG,"deleted Rows "+deletedRows);
                                         if(deletedRows>0){
                                             dismiss();
                                             new Utility().createToast(mContext,Constants.UNMARK_REPO_FAVOURITE_SUCCESS,Toast.LENGTH_LONG);
@@ -121,7 +112,7 @@ public class UnmarkFavouriteDialogFragment extends DialogFragment {
 
                                     @Override
                                     public void callBackOnFailure(Exception e) {
-                                        Log.e(LOG_TAG,"unable to unmark repo",e);
+                                        //Log.e(LOG_TAG,"unable to unmark repo",e);
                                         dismiss();
                                         new Utility().createToast(mContext,Constants.SERVER_UNREACHABLE,Toast.LENGTH_LONG);
 
@@ -132,7 +123,7 @@ public class UnmarkFavouriteDialogFragment extends DialogFragment {
 
                         @Override
                         public void callBackOnFailure(Exception e) {
-                            Log.e(LOG_TAG,"unable to unmark repo",e);
+                            //Log.e(LOG_TAG,"unable to unmark repo",e);
                             dismiss();
                             new Utility().createToast(mContext,Constants.SERVER_UNREACHABLE,Toast.LENGTH_LONG);
                         }

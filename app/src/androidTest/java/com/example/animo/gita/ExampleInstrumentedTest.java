@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.animo.gita", appContext.getPackageName());
+        assertEquals("com.example.animo.com.animo.gita", appContext.getPackageName());
     }
 }

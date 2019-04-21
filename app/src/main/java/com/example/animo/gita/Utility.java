@@ -4,11 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 import android.widget.Toast;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 /**
  * Created by animo on 18/6/17.

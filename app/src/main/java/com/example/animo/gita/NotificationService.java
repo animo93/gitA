@@ -4,13 +4,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
 import com.example.animo.gita.activity.CommitsDetailActivity;
 import com.example.animo.gita.activity.MainActivity;
-import com.example.animo.gita.fragments.MainActivityFragment;
 
 /**
  * Created by animo on 4/6/17.

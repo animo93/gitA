@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.webkit.WebView;
 
 import com.example.animo.gita.Constants;
@@ -40,7 +39,7 @@ public class FileViewActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         String title = intent.getStringExtra(Constants.TITLE);
-        Log.d(LOG_TAG, "Title is " + title);
+        //Log.d(LOG_TAG, "Title is " + title);
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

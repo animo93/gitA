@@ -2,10 +2,8 @@ package com.example.animo.gita.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +13,6 @@ import android.widget.TextView;
 import com.example.animo.gita.Constants;
 import com.example.animo.gita.R;
 import com.example.animo.gita.activity.FileDiffActivity;
-import com.example.animo.gita.activity.ReposDetailActivity;
 import com.example.animo.gita.model.Files;
 
 import java.util.List;
@@ -38,7 +35,7 @@ public class CommitFileAdapter extends ArrayAdapter<Files> implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        Log.i(LOG_TAG,"inside onClick");
+        //Log.i(LOG_TAG,"inside onClick");
         int position = (int) view.getTag();
         Files files= getItem(position);
         Intent intent = new Intent(mContext, FileDiffActivity.class);
@@ -77,7 +74,7 @@ public class CommitFileAdapter extends ArrayAdapter<Files> implements View.OnCli
         result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(LOG_TAG,"inside onClick");
+                //Log.i(LOG_TAG,"inside onClick");
                 Files files= getItem(position);
                 Intent intent = new Intent(view.getContext(), FileDiffActivity.class);
                 intent.putExtra(Constants.DIFF_CONTENT,files.getPatch());
@@ -85,7 +82,7 @@ public class CommitFileAdapter extends ArrayAdapter<Files> implements View.OnCli
                 mContext.startActivity(intent);
             }
         });
-        Log.d(CommitFileAdapter.class.getSimpleName(),"title "+files.getFilename());
+        //Log.d(CommitFileAdapter.class.getSimpleName(),"title "+files.getFilename());
         viewHolder.titleView.setText(files.getFilename());
         viewHolder.additionsView.setText("+"+files.getAdditions());
         viewHolder.deltionsView.setText("-"+files.getDeletions());

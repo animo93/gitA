@@ -1,38 +1,29 @@
 package com.example.animo.gita.adapter;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.animo.gita.Constants;
 import com.example.animo.gita.R;
-import com.example.animo.gita.Utility;
 import com.example.animo.gita.activity.MainActivity;
 import com.example.animo.gita.activity.ReposDetailActivity;
 import com.example.animo.gita.data.RepoContract;
 import com.example.animo.gita.fragments.MarkFavouriteDialogFragment;
 import com.example.animo.gita.fragments.UnmarkFavouriteDialogFragment;
 import com.example.animo.gita.model.Config;
-import com.example.animo.gita.model.RepoRegister;
-import com.example.animo.gita.model.RepoRegisterOutput;
 import com.example.animo.gita.model.Repository;
 import com.example.animo.gita.model.WebHookRegister;
 import com.example.animo.gita.retrofit.ApiClient;
 import com.example.animo.gita.retrofit.ApiInterface;
-import com.example.animo.gita.retrofit.NotificationClient;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -176,7 +167,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoAdapterVie
 
                     @Override
                     public void onFailure(Call<Repository> call, Throwable t) {
-                        Log.e(LOG_TAG,"inside failure "+t.toString());
+                        //Log.e(LOG_TAG,"inside failure "+t.toString());
 
                     }
                 });

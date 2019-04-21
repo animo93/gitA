@@ -41,4 +41,14 @@
         <item name="android:topDark">@android:color/transparent</item>
     </style>
 
+    <style name="BaseAppTheme" parent="android:Theme.Material">
+    <!-- enable window content transitions -->
+    <item name="android:windowActivityTransitions">true</item>
+
+    <!-- specify enter and exit transitions -->
+    <item name="android:windowEnterTransition">@transition/enter</item>
+    <item name="android:windowExitTransition">@transition/enter</item>
+
+    </style>
+
 </resources>

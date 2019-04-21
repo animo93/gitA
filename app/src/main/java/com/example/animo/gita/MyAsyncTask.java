@@ -2,7 +2,6 @@ package com.example.animo.gita;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -48,7 +47,7 @@ public class MyAsyncTask<Request,Response> extends AsyncTask<MyRequestBean<Reque
             Uri buildUri = Uri.parse(bean.getUrl()).buildUpon()
                     .build();
             URL url = new URL(buildUri.toString());
-            Log.e(LOG_TAG, "url is " + url);
+            //Log.e(LOG_TAG, "url is " + url);
 
 
             httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -60,13 +59,13 @@ public class MyAsyncTask<Request,Response> extends AsyncTask<MyRequestBean<Reque
             if(bean.getRequestType().toString().equals("POST") || bean.getRequestType().toString().equals("PATCH")){
                 Request requestObject= bean.getRequestObject();
                 String json = new Gson().toJson(requestObject,new TypeToken<Request>(){}.getType());
-                Log.d(LOG_TAG,"request json "+json);
+                //Log.d(LOG_TAG,"request json "+json);
                 OutputStream os = httpURLConnection.getOutputStream();
                 os.write(json.getBytes("UTF-8"));
                 os.close();
             }
             httpURLConnection.connect();
-            Log.d(LOG_TAG,"response code "+httpURLConnection.getResponseCode());
+            //Log.d(LOG_TAG,"response code "+httpURLConnection.getResponseCode());
             int status = httpURLConnection.getResponseCode();
             myCall.setResponseCode(status);
             InputStream inputStream;
@@ -92,7 +91,7 @@ public class MyAsyncTask<Request,Response> extends AsyncTask<MyRequestBean<Reque
                 inputStream.close();
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG,"Could not make connection "+e);
+            //Log.e(LOG_TAG,"Could not make connection "+e);
             e.printStackTrace();
             //myCallBack.callBackOnFailure(e);
         } finally {
@@ -102,14 +101,14 @@ public class MyAsyncTask<Request,Response> extends AsyncTask<MyRequestBean<Reque
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    Log.e(LOG_TAG, "error", e);
+                    //Log.e(LOG_TAG, "error", e);
                 }
             }
         }
 
         Gson gson = new Gson();
         if(repoJson!=null){
-            Log.d(LOG_TAG,"Response Output "+repoJson);
+            //Log.d(LOG_TAG,"Response Output "+repoJson);
             Response response = gson.fromJson(repoJson, type);
             myCall.setResponseBody(response);
         }

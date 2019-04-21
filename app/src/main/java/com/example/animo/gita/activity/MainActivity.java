@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -14,18 +13,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.animo.gita.CircleTransform;
 import com.example.animo.gita.FetchActivityService;
 import com.example.animo.gita.R;
+import com.example.animo.gita.fragments.LogOutFragment;
 import com.example.animo.gita.fragments.MainActivityFragment;
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -34,7 +30,6 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.concurrent.TimeUnit;
 
@@ -70,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e(MainActivity.class.getSimpleName(),"inside onCreate");
+       // Log.e(MainActivity.class.getSimpleName(),"inside onCreate");
         //setContentView(R.layout.navigation_drawer);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -337,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setToolbarTitle() {
-        Log.e(MainActivity.class.getSimpleName(), "setToolbarTitle "+activityTitles[navItemIndex]);
+       // Log.e(MainActivity.class.getSimpleName(), "setToolbarTitle "+activityTitles[navItemIndex]);
         getSupportActionBar().setTitle(activityTitles[navItemIndex]);
     }
 
@@ -355,7 +350,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e(LOG_TAG,"inside on Destroy");
+        //Log.e(LOG_TAG,"inside on Destroy");
     }
 
     @Override
@@ -367,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
-            FirebaseAuth auth = FirebaseAuth.getInstance();
+            /*FirebaseAuth auth = FirebaseAuth.getInstance();
             if(auth!=null){
                 auth.signOut();
 
@@ -378,7 +373,9 @@ public class MainActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 //finishAndRemoveTask();
-            }
+            }*/
+            LogOutFragment logOutFragment = new LogOutFragment();
+            logOutFragment.show(getSupportFragmentManager(),"LogOut");
             return true;
         }
 

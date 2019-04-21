@@ -1,7 +1,5 @@
 package com.example.animo.gita;
 
-import android.content.res.Resources;
-
 /**
  * Created by animo on 10/5/17.
  */

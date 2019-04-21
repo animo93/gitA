@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +55,7 @@ public class CommitsFragment extends Fragment {
         final String repo = getArguments().getString(Constants.REPO);
         final String owner = getArguments().getString(Constants.OWNER);
 
-        Log.d(LOG_TAG,"Repo name "+repo+" and owner "+owner);
+        //Log.d(LOG_TAG,"Repo name "+repo+" and owner "+owner);
 
         ApiInterface apiService = ApiClient.createService(ApiInterface.class,null);
 
@@ -64,18 +63,18 @@ public class CommitsFragment extends Fragment {
         call.enqueue(new Callback<List<RepoCommit>>() {
             @Override
             public void onResponse(retrofit2.Call<List<RepoCommit>> call, Response<List<RepoCommit>> response) {
-                Log.i(LOG_TAG,"inside onResponse");
+                //Log.i(LOG_TAG,"inside onResponse");
                 repoCommits = response.body();
                 commitAdapter.setRepoCommitList(repoCommits);
                 commitAdapter.setOwner(owner);
                 commitAdapter.setRepo(repo);
                 commitAdapter.notifyDataSetChanged();
-                Log.d(LOG_TAG,"Size of Commits "+repoCommits.size());
+                //Log.d(LOG_TAG,"Size of Commits "+repoCommits.size());
             }
 
             @Override
             public void onFailure(retrofit2.Call<List<RepoCommit>> call, Throwable t) {
-                Log.e(LOG_TAG,"inside Failure "+t.toString());
+                //Log.e(LOG_TAG,"inside Failure "+t.toString());
 
             }
         });

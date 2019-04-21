@@ -6,10 +6,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,10 +15,8 @@ import android.widget.Toast;
 import com.example.animo.gita.Constants;
 import com.example.animo.gita.MyApiInterface;
 import com.example.animo.gita.MyApiResponse;
-import com.example.animo.gita.MyAsyncTask;
 import com.example.animo.gita.MyCall;
 import com.example.animo.gita.MyCallBack;
-import com.example.animo.gita.MyRequestBean;
 import com.example.animo.gita.R;
 import com.example.animo.gita.Utility;
 import com.example.animo.gita.data.RepoContract;
@@ -29,22 +25,14 @@ import com.example.animo.gita.model.RepoRegister;
 import com.example.animo.gita.model.RepoRegisterOutput;
 import com.example.animo.gita.model.Repository;
 import com.example.animo.gita.model.WebHookRegister;
-import com.example.animo.gita.retrofit.ApiClient;
 import com.example.animo.gita.retrofit.ApiInterface;
 import com.example.animo.gita.retrofit.NotificationClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by animo on 6/12/17.
@@ -75,7 +63,7 @@ public class MarkFavouriteDialogFragment extends DialogFragment {
         mSelectedItems = new ArrayList<>();
         final String accessToken = new Utility().getAccessToken(getContext());
         final String regToken = new Utility().getRegToken(getContext());
-        Log.e(LOG_TAG,"Access Token "+accessToken);
+        //Log.e(LOG_TAG,"Access Token "+accessToken);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.dialog_title);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -111,14 +99,14 @@ public class MarkFavouriteDialogFragment extends DialogFragment {
 
     private void backendWebhookRegister(final String hookId, String regToken) {
         ApiInterface notifService = NotificationClient.createService(ApiInterface.class,null);
-        Log.d(LOG_TAG,"Onwer "+repo.getOwner().getLogin()+" and repo "+repo.getName());
+        //Log.d(LOG_TAG,"Onwer "+repo.getOwner().getLogin()+" and repo "+repo.getName());
 
         MyApiInterface myApiInterface = MyApiResponse.createApi(MyApiInterface.class);
         MyCall<RepoRegister,RepoRegisterOutput> call = myApiInterface.markFavRepo(null,Constants.NOTIF_ROOT_URL+Constants.REGISTER_REPO,new RepoRegister(regToken,repo.getId().toString()));
         call.callMeNow(new MyCallBack<RepoRegister, RepoRegisterOutput>() {
             @Override
             public void callBackOnSuccess(MyCall<RepoRegister, RepoRegisterOutput> myCall) {
-                Log.i(LOG_TAG,"inside onResponse");
+                //Log.i(LOG_TAG,"inside onResponse");
                 ContentValues repoValues = new ContentValues();
                 //repoValues.put(RepoContract.FavRepos.COLUMN_ETAG,eTag);
                 repoValues.put(RepoContract.FavRepos.COLUMN_REPO_ID,repo.getId());
@@ -130,7 +118,7 @@ public class MarkFavouriteDialogFragment extends DialogFragment {
                 if(myCall.getResponseCode() == 200){
                     Uri insertUri=mContext.getContentResolver().insert(RepoContract.FavRepos.CONTENT_URI,repoValues);
                     if(insertUri!=null){
-                        Log.d(LOG_TAG,"Repo inserted and Uri is" +insertUri.toString());
+                        //Log.d(LOG_TAG,"Repo inserted and Uri is" +insertUri.toString());
                         dismiss();
                         new Utility().createToast(mContext,Constants.MARK_REPO_FAVOURITE,Toast.LENGTH_LONG);
                     }
@@ -139,7 +127,7 @@ public class MarkFavouriteDialogFragment extends DialogFragment {
 
             @Override
             public void callBackOnFailure(Exception e) {
-                Log.e(LOG_TAG,"Could not insert favourite repos ",e);
+                //Log.e(LOG_TAG,"Could not insert favourite repos ",e);
                 dismiss();
                 new Utility().createToast(mContext,Constants.SERVER_UNREACHABLE,Toast.LENGTH_LONG);
             }
@@ -153,7 +141,7 @@ public class MarkFavouriteDialogFragment extends DialogFragment {
 
         final String accessToken = new Utility().getAccessToken(getContext());
         final String regToken = new Utility().getRegToken(getContext());
-        Log.e(LOG_TAG,"Access Token "+accessToken);
+        //Log.e(LOG_TAG,"Access Token "+accessToken);
         AlertDialog alertDialog = (AlertDialog) getDialog();
         final Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
         okButton.setOnClickListener(new View.OnClickListener() {
@@ -167,14 +155,14 @@ public class MarkFavouriteDialogFragment extends DialogFragment {
                         @Override
                         public void callBackOnSuccess(MyCall<Void, List<WebHookRegister>> myCall) {
                             if(myCall.getResponseCode() == 200){
-                                Log.d(LOG_TAG,"response body "+myCall.getResponseBody());
+                                //Log.d(LOG_TAG,"response body "+myCall.getResponseBody());
                                 Boolean webHookExists = false;
                                 if(myCall.getResponseBody().size() > 0 ){
                                     for(final WebHookRegister hook : myCall.getResponseBody()) {
                                         if (hook.getConfig().getUrl().equals(Constants.NOTIF_ROOT_URL + Constants.WEBHOOK_URL)) {
                                             webHookExists=true;
                                             //Patch Existing hook
-                                            Log.d(LOG_TAG,"id is "+hook.getId());
+                                            //Log.d(LOG_TAG,"id is "+hook.getId());
                                             MyApiInterface myService = MyApiResponse.createApi(MyApiInterface.class);
                                             MyCall<WebHookRegister, WebHookRegister> myCall2 = myService.patchHook(accessToken,Constants.ROOT_URL+"/repos/"+repo.getOwner().getLogin()+"/"+repo.getName()+"/hooks/"+hook.getId(),createWebHookPayload(mSelectedItems));
                                             myCall2.callMeNow(new MyCallBack<WebHookRegister, WebHookRegister>() {
@@ -188,7 +176,7 @@ public class MarkFavouriteDialogFragment extends DialogFragment {
 
                                                 @Override
                                                 public void callBackOnFailure(Exception e) {
-                                                    Log.e(LOG_TAG,"Could not edit webhook"+e.getMessage());
+                                                    //Log.e(LOG_TAG,"Could not edit webhook"+e.getMessage());
                                                     dismiss();
                                                     //new Utility().createToast(mContext,Constants.SERVER_UNREACHABLE,Toast.LENGTH_LONG);
                                                 }
@@ -205,7 +193,7 @@ public class MarkFavouriteDialogFragment extends DialogFragment {
                                     call.callMeNow(new MyCallBack<WebHookRegister, WebHookRegister>() {
                                         @Override
                                         public void callBackOnSuccess(MyCall<WebHookRegister, WebHookRegister> myCall) {
-                                            Log.i(LOG_TAG, "inside onResponse of Webhook Callback");
+                                            //Log.i(LOG_TAG, "inside onResponse of Webhook Callback");
                                             if (myCall.getResponseCode() == 201) {
                                                 backendWebhookRegister(myCall.getResponseBody().getId(), regToken);
                                                 dismiss();
@@ -214,7 +202,7 @@ public class MarkFavouriteDialogFragment extends DialogFragment {
 
                                         @Override
                                         public void callBackOnFailure(Exception e) {
-                                            Log.e(LOG_TAG, "Could not register WebHooks", e);
+                                            //Log.e(LOG_TAG, "Could not register WebHooks", e);
                                             dismiss();
                                             new Utility().createToast(mContext, Constants.SERVER_UNREACHABLE, Toast.LENGTH_LONG);
                                         }
@@ -226,7 +214,7 @@ public class MarkFavouriteDialogFragment extends DialogFragment {
 
                         @Override
                         public void callBackOnFailure(Exception e) {
-                            Log.e(LOG_TAG,"Unable to fetch repo List "+e.getMessage());
+                            //Log.e(LOG_TAG,"Unable to fetch repo List "+e.getMessage());
                             dismiss();
                             new Utility().createToast(mContext,Constants.SERVER_UNREACHABLE,Toast.LENGTH_LONG);
                         }

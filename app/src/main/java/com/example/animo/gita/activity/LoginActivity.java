@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -37,8 +38,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GithubAuthProvider;
 
-import java.util.Random;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,7 +57,7 @@ public class LoginActivity extends AppCompatActivity{
     private static final int RC_SIGN_IN = 1;
 
     public LoginActivity(){
-        Log.i(LOG_TAG,"inside Constructor");
+       // Log.i(LOG_TAG,"inside Constructor");
         this.mActivity=this;
     }
 
@@ -66,15 +65,19 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e(LOG_TAG,"inside onDestroy");
+        //Log.e(LOG_TAG,"inside onDestroy");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i(LOG_TAG,"inside onResume");
+        //Log.e(LOG_TAG,"inside onResume");
         mAuth.addAuthStateListener(mAuthStateListener);
-
+        Uri uri = getIntent().getData();
+        //Log.e(LOG_TAG,"Uri is "+uri);
+        if(uri!=null){
+            authenticateUri(uri);
+        }
 
     }
 
@@ -90,7 +93,7 @@ public class LoginActivity extends AppCompatActivity{
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser!=null){
-            Log.d(LOG_TAG,"Current user is "+currentUser.getDisplayName());
+           // Log.d(LOG_TAG,"Current user is "+currentUser.getDisplayName());
             finish();
             Intent intent = new Intent(this,MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -103,9 +106,9 @@ public class LoginActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         progressBar = new ProgressDialog(mActivity);
         progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressBar.setCancelable(true);
-        progressBar.setMessage("Logging you in.....");
-        progressBar.getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
+        progressBar.setCancelable(false);
+        progressBar.setMessage("Connecting to Server.....");
+        //progressBar.getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
 
@@ -114,7 +117,7 @@ public class LoginActivity extends AppCompatActivity{
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser currentUser = firebaseAuth.getCurrentUser();
                 if(currentUser!=null){
-                    Log.d(LOG_TAG,"Current user is "+currentUser.getDisplayName());
+                    //Log.d(LOG_TAG,"Current user is "+currentUser.getDisplayName());
                     finish();
                     Intent intent = new Intent(mActivity,MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -125,11 +128,11 @@ public class LoginActivity extends AppCompatActivity{
         setContentView(R.layout.activity_signin);
         Button button = (Button) findViewById(R.id.button_signin);
         //Log.d(LOG_TAG,"Random string is "+Constants.RANDOM_CODE);
-        final Uri buildUri = Uri.parse(Constants.OATH2_URL).buildUpon()
+        /*final Uri buildUri = Uri.parse(Constants.OATH2_URL).buildUpon()
                 .appendQueryParameter("client_id",getResources().getString(R.string.client_id))
                 .appendQueryParameter("scope","repo admin:repo_hook user")
                 .appendQueryParameter(Constants.AUTH_STATE,Constants.RANDOM_CODE)
-                .build();
+                .build();*/
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,42 +166,71 @@ public class LoginActivity extends AppCompatActivity{
                                 public void callBackOnSuccess(MyCall<RepoRegister, DeviceRegisterOutput> myCall) {
                                     if(myCall.getResponseCode()==200){
                                         DeviceRegisterOutput output = myCall.getResponseBody();
-                                        Log.e(LOG_TAG,"Client id= "+output.getClientId()+" and key "+output.getClientKey());
+                                       // Log.e(LOG_TAG,"Client id= "+output.getClientId()+" and key "+output.getClientKey());
                                         saveToSharedPreference("client_id",output.getClientId());
                                         saveToSharedPreference("client_secret",output.getClientKey());
                                         progressBar.hide();
-                                        Intent intent = new Intent(mActivity,OAuthLoginActivity.class);
-                                        intent.putExtra(Constants.URL,buildUri.toString());
+
+                                        CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
+                                        intentBuilder.setStartAnimations(mActivity,R.anim.enter_from_right,R.anim.exit_to_left);
+                                        CustomTabsIntent customTabsIntent = intentBuilder.build();
+                                        customTabsIntent.intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        customTabsIntent.launchUrl(mActivity,buildOAuthUri());
+
+                                        /*Intent intent = new Intent(mActivity,OAuthLoginActivity.class);
+                                        intent.putExtra(Constants.URL,buildOAuthUri());
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                         startActivity(intent);
-                                        finish();
+                                        finish();*/
+                                    }else{
+                                        progressBar.setMessage("Can't connect to Server");
+                                        progressBar.setCancelable(true);
                                     }
                                 }
 
                                 @Override
                                 public void callBackOnFailure(Exception e) {
                                     progressBar.setMessage("Can't Connect to Server");
+                                    progressBar.setCancelable(true);
 
                                 }
                             });
 
                         }else{
                             progressBar.setMessage("Can't Connect to Server");
+                            progressBar.setCancelable(true);
                         }
                     }else{
-                        progressBar.hide();
-                        Intent intent = new Intent(mActivity,OAuthLoginActivity.class);
-                        intent.putExtra(Constants.URL,buildUri.toString());
+                        progressBar.cancel();
+                        CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
+                        CustomTabsIntent customTabsIntent = intentBuilder.build();
+                        customTabsIntent.intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        //customTabsIntent.intent.setPackage("com.android.chrome");
+                        customTabsIntent.launchUrl(mActivity,buildOAuthUri());
+
+                        /*Intent intent = new Intent(mActivity,OAuthLoginActivity.class);
+                        intent.putExtra(Constants.URL,buildOAuthUri());
                         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                         startActivity(intent);
-                        finish();
+                        finish();*/
                     }
 
                 }else{
                     progressBar.setMessage("No Internet Connection Found");
+                    progressBar.setCancelable(true);
                 }
             }
         });
+    }
+
+    private Uri buildOAuthUri() {
+        Uri buildUri = Uri.parse(Constants.OATH2_URL).buildUpon()
+                .appendQueryParameter("client_id",new Utility().getClientId(mActivity))
+                .appendQueryParameter("scope","repo admin:repo_hook user")
+                .appendQueryParameter(Constants.AUTH_STATE,Constants.RANDOM_CODE)
+                .build();
+        return buildUri;
+
     }
 
     private boolean keysAvailable() {
@@ -213,7 +245,7 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     public void finish() {
         super.finish();
-        Log.i(LOG_TAG,"inside finish");
+        //Log.i(LOG_TAG,"inside finish");
     }
 
     @Override
@@ -226,33 +258,35 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i(LOG_TAG,"inside onActivityResult");
+        //Log.i(LOG_TAG,"inside onActivityResult");
         //Log.d(LOG_TAG,"request code "+requestCode+" resultCode "+resultCode+"data "+data.getStringExtra("token"));
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser!=null){
-            Log.d(LOG_TAG,"Current user is "+currentUser.getDisplayName());
+           // Log.d(LOG_TAG,"Current user is "+currentUser.getDisplayName());
             finish();
             Intent intent = new Intent(this,MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }else{
-            authenticateUri(data.getStringExtra("token"));
+            authenticateUri(data.getData());
         }
     }
 
-    private void authenticateUri(String url) {
-        Uri uri = Uri.parse(url);
+    private void authenticateUri(Uri uri) {
         if(uri != null && uri.toString().startsWith(Constants.REDIRECT_URL)){
             String code = uri.getQueryParameter(Constants.AUTH_CODE);
             String state = uri.getQueryParameter(Constants.AUTH_STATE);
             //Log.d(LOG_TAG,"Returned State "+state);
             if(!state.equals(Constants.RANDOM_CODE)){
-                Log.e(LOG_TAG,"It is a forgery attack ....Stopping");
+               // Log.e(LOG_TAG,"It is a forgery attack ....Stopping");
                 return;
             }
             if(code!= null){
                 ApiInterface apiService = ApiClient.createService(ApiInterface.class,null);
-                Call<Access> call = apiService.getAccessToken(code,getResources().getString(R.string.client_id),getResources().getString(R.string.client_secret));
+                String clientId = new Utility().getClientId(mActivity);
+                String clientKey = new Utility().getClientSecret(mActivity);
+                //Log.e(LOG_TAG,"Client id= "+clientId+" and key "+clientKey);
+                Call<Access> call = apiService.getAccessToken(code,clientId,clientKey);
                 call.enqueue(new Callback<Access>() {
                     @Override
                     public void onResponse(Call<Access> call, Response<Access> response) {
@@ -265,7 +299,7 @@ public class LoginActivity extends AppCompatActivity{
                                         .addOnCompleteListener(mActivity, new OnCompleteListener<AuthResult>() {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                                Log.d(LOG_TAG,"Sign in with credential "+task.isSuccessful());
+                                                //Log.d(LOG_TAG,"Sign in with credential "+task.isSuccessful());
                                                 saveToSharedPreference(getString(R.string.access_token),accessToken);
                                                 Intent intent = new Intent(mActivity,MainActivity.class);
                                                 intent.putExtra("access_token",accessToken);
@@ -273,7 +307,7 @@ public class LoginActivity extends AppCompatActivity{
                                                 startActivity(intent);
                                                 finish();
                                                 if(!task.isSuccessful()){
-                                                    Log.e(LOG_TAG,"Sign in with credential ",task.getException());
+                                                    //Log.e(LOG_TAG,"Sign in with credential ",task.getException());
                                                     Toast.makeText(mActivity,getResources().getString(R.string.Login_failure),Toast.LENGTH_SHORT).show();
                                                 }
 
@@ -286,13 +320,13 @@ public class LoginActivity extends AppCompatActivity{
 
                     @Override
                     public void onFailure(Call<Access> call, Throwable t) {
-                        Log.e(LOG_TAG,"unable to get access token....Try Again"+t.toString());
+                        //Log.e(LOG_TAG,"unable to get access token....Try Again"+t.toString());
 
                     }
                 });
 
             }else {
-                Log.e(LOG_TAG,"Unable to authorize ....PLease try again");
+                //Log.e(LOG_TAG,"Unable to authorize ....PLease try again");
             }
         }
     }

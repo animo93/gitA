@@ -3,7 +3,6 @@ package com.example.animo.gita.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +82,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FilesAdapter
         holder.title.setText(filesList.get(position).getName());
         String type = filesList.get(position).getType();
 
-        Log.d(LOG_TAG,"File Name "+filesList.get(position).getName()+" and type "+type);
+       // Log.d(LOG_TAG,"File Name "+filesList.get(position).getName()+" and type "+type);
         if(type.equals("file")){
             Glide.with(mContext).load(R.drawable.ic_insert_drive_file_black_24dp)
                     .crossFade()
@@ -111,7 +110,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FilesAdapter
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(LOG_TAG,"Path "+filesList.get(position).getPath());
+                    //Log.d(LOG_TAG,"Path "+filesList.get(position).getPath());
                     Intent intent = new Intent(mContext,ReposDetailActivity.class);
                     intent.putExtra(Constants.REPO,repoName);
                     intent.putExtra(Constants.OWNER,owner);

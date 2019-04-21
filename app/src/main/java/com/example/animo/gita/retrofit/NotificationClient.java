@@ -1,12 +1,10 @@
 package com.example.animo.gita.retrofit;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.example.animo.gita.Constants;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -38,7 +36,7 @@ public class NotificationClient {
     public static <S> S createService(Class<S> serviceClass , final String authToken) {
 
         if(!TextUtils.isEmpty(authToken)) {
-            Log.e(ApiClient.class.getSimpleName(),"authToken is "+authToken);
+            //Log.e(ApiClient.class.getSimpleName(),"authToken is "+authToken);
 
             Interceptor interceptor = new Interceptor() {
                 @Override

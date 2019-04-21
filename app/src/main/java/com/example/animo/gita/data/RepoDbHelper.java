@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class RepoDbHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     static final String DATABASE_NAME = "repos.db";
     public RepoDbHelper(Context context) {
@@ -23,10 +23,17 @@ public class RepoDbHelper extends SQLiteOpenHelper {
 
                 RepoContract.FavRepos.COLUMN_REPO_ID + " TEXT NOT NULL, "+
                 RepoContract.FavRepos.COLUMN_TITLE + " TEXT NOT NULL, " +
-                RepoContract.FavRepos.COLUMN_ETAG + " TEXT, " +
+                RepoContract.FavRepos.COLUMN_URL + " TEXT, " +
+                RepoContract.FavRepos.COLUMN_FORK + " TEXT, " +
                 RepoContract.FavRepos.COLUMN_REPO_OWNER + " TEXT NOT NULL, " +
                 RepoContract.FavRepos.COLUMN_UPDATED_DATE + " TEXT, " +
-                RepoContract.FavRepos.COLUMN_HOOK_ID + " TEXT " +
+                RepoContract.FavRepos.COLUMN_HOOK_ID + " TEXT, " +
+                RepoContract.FavRepos.COLUMN_REPO_DESC + " TEXT, " +
+                RepoContract.FavRepos.COLUMN_REPO_LANGUAGE + " TEXT, " +
+                RepoContract.FavRepos.COLUMN_REPO_FORK_COUNT + " TEXT, " +
+                RepoContract.FavRepos.COLUMN_REPO_ISSUE_COUNT + " TEXT, " +
+                RepoContract.FavRepos.COLUMN_REPO_STAR_COUNT + " TEXT, " +
+                RepoContract.FavRepos.COLUMN_REPO_FAV + " TEXT " +
                 " );";
         sqLiteDatabase.execSQL(SQL_CREATE_REPOS_TABLE);
 

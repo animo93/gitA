@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "610271358538",
-    "firebase_url": "https://gita-6edfc.firebaseio.com",
-    "project_id": "gita-6edfc",
-    "storage_bucket": "gita-6edfc.appspot.com"
+    "project_number": "719029236450",
+    "firebase_url": "https://gita-prod.firebaseio.com",
+    "project_id": "gita-prod",
+    "storage_bucket": "gita-prod.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:610271358538:android:a75197f937cb44a0",
+        "mobilesdk_app_id": "1:719029236450:android:d7e0817657d1d56f",
         "android_client_info": {
-          "package_name": "com.example.animo.gita"
+          "package_name": "com.animo.gita"
         }
       },
       "oauth_client": [
         {
-          "client_id": "610271358538-i5v3m2erf6cdc5i4ikbiqh8fmjjgnb9t.apps.googleusercontent.com",
+          "client_id": "719029236450-8kf8nc0bf0p5009g269jb4s4muvjfgvv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBoRhiM5fcLA-xs5RuSTRaZM3F9dYrnWAE"
+          "current_key": "AIzaSyCROB9U_9GzFzqpHoMmf9R95EVwV9zkjvc"
         }
       ],
       "services": {

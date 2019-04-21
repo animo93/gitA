@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.example.animo.gita.data.RepoContract;
 import com.example.animo.gita.model.Event;
-import com.example.animo.gita.model.PayLoad;
 import com.example.animo.gita.model.RepoCommit;
 import com.example.animo.gita.retrofit.ApiClient;
 import com.example.animo.gita.retrofit.ApiInterface;
@@ -54,7 +53,7 @@ public class FetchActivityService extends JobService {
                     null);
 
             if(cursor!=null){
-                Log.e(LOG_TAG,"Number of fav repos "+cursor.getCount());
+                //Log.e(LOG_TAG,"Number of fav repos "+cursor.getCount());
                 for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
                     final String owner = cursor.getString(RepoContract.FavRepos.COL_REPO_OWNER_ID);
                     String etag = "\""+cursor.getString(RepoContract.FavRepos.COL_ETAG_ID)+"\"";
@@ -64,14 +63,14 @@ public class FetchActivityService extends JobService {
                     call.enqueue(new Callback<List<Event>>() {
                         @Override
                         public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
-                            Log.i(LOG_TAG,"inside onResponse");
+                            //Log.i(LOG_TAG,"inside onResponse");
                             if(response !=null){
                                 if(response.body()==null)
                                     return;
                                 else {
                                     List<Event> events = response.body();
                                     if(events!=null && events.size()>0){
-                                        Log.i(LOG_TAG,"event size "+events.size());
+                                        //Log.i(LOG_TAG,"event size "+events.size());
                                         if(events.get(0).getType().equalsIgnoreCase(Constants.PUSH_EVENT)){
                                             RepoCommit repoCommit = events.get(0).getPayload().getCommits().get(0);
                                             NotificationService notificationService = new NotificationService(getApplicationContext());
@@ -87,7 +86,7 @@ public class FetchActivityService extends JobService {
 
                         @Override
                         public void onFailure(Call<List<Event>> call, Throwable t) {
-                            Log.e(LOG_TAG,"Failed to make api call"+t);
+                            //Log.e(LOG_TAG,"Failed to make api call"+t);
 
                         }
 
@@ -97,7 +96,7 @@ public class FetchActivityService extends JobService {
                 }
             }
         } catch (Exception e){
-            Log.e(LOG_TAG,"Cannot start notification "+e);
+            //Log.e(LOG_TAG,"Cannot start notification "+e);
         } finally {
             cursor.close();
         }
@@ -106,7 +105,7 @@ public class FetchActivityService extends JobService {
 
     @Override
     public boolean onStopJob(JobParameters job) {
-        Log.i(LOG_TAG,"Inside onStopJob");
+        //Log.i(LOG_TAG,"Inside onStopJob");
         return false;
     }
 }

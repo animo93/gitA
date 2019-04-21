@@ -1,9 +1,6 @@
 package com.example.animo.gita;
 
-import com.example.animo.gita.model.WebHookRegister;
 import com.example.animo.gita.retrofit.NotificationClient;
-
-import java.util.List;
 
 /**
  * Created by animo on 21/12/17.

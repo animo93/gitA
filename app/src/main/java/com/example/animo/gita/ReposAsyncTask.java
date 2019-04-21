@@ -2,7 +2,6 @@ package com.example.animo.gita;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.example.animo.gita.fragments.MainActivityFragment;
 import com.example.animo.gita.model.Repository;
@@ -14,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +33,8 @@ public class ReposAsyncTask extends AsyncTask<String,Void,List<Repository>> {
     @Override
     protected void onPostExecute(List<Repository> repositories) {
         super.onPostExecute(repositories);
+        //batch delete of existing data
+        //insert all data
         mainActivityFragment.repoAdapter.setRepositoryList(repositories);
         mainActivityFragment.repoAdapter.notifyDataSetChanged();
 
@@ -42,7 +42,7 @@ public class ReposAsyncTask extends AsyncTask<String,Void,List<Repository>> {
 
     @Override
     protected List<Repository> doInBackground(String... params) {
-        Log.i(LOG_TAG,"inside doInBackground");
+        //Log.i(LOG_TAG,"inside doInBackground");
         if(params.length == 0)
             return null;
         String accessToken = params[0];
@@ -57,7 +57,7 @@ public class ReposAsyncTask extends AsyncTask<String,Void,List<Repository>> {
                     .appendPath("repos")
                     .build();
             URL url = new URL(buildUri.toString());
-            Log.e(LOG_TAG, "url is " + url);
+            //Log.e(LOG_TAG, "url is " + url);
 
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("GET");
@@ -88,14 +88,14 @@ public class ReposAsyncTask extends AsyncTask<String,Void,List<Repository>> {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    Log.e(LOG_TAG, "error", e);
+                    //Log.e(LOG_TAG, "error", e);
                 }
             }
         }
 
         Gson gson = new Gson();
         repoList = gson.fromJson(repoJson, new TypeToken<List<Repository>>(){}.getType());
-        Log.d(LOG_TAG,"Repos size "+repoList.size());
+        //Log.d(LOG_TAG,"Repos size "+repoList.size());
         return repoList;
     }
 }

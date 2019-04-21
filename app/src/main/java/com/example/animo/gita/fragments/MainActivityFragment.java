@@ -1,35 +1,21 @@
 package com.example.animo.gita.fragments;
 
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.animo.gita.ReposAsyncTask;
 import com.example.animo.gita.Utility;
-import com.example.animo.gita.retrofit.ApiClient;
-import com.example.animo.gita.retrofit.ApiInterface;
-import com.example.animo.gita.AsyncProcessOutput;
-import com.example.animo.gita.Constants;
 import com.example.animo.gita.R;
 import com.example.animo.gita.adapter.RepoAdapter;
 import com.example.animo.gita.model.Repository;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.OkHttpClient;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -56,14 +42,14 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.e(LOG_TAG,"inside onResume ");
+        //Log.e(LOG_TAG,"inside onResume ");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.e(LOG_TAG,"inside onCreateView");
+        //Log.e(LOG_TAG,"inside onCreateView");
 
         View rootView = inflater.inflate(R.layout.fragment_main,container,false);
 
@@ -77,7 +63,7 @@ public class MainActivityFragment extends Fragment {
 
         //Bundle args = getArguments();
         String accessToken = new Utility().getAccessToken(getContext());
-        Log.d(LOG_TAG,"Access Token "+accessToken);
+        //Log.d(LOG_TAG,"Access Token "+accessToken);
 
         ReposAsyncTask reposAsyncTask = new ReposAsyncTask(this);
         reposAsyncTask.execute(accessToken);
@@ -87,7 +73,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.e(LOG_TAG,"inside onDestrooyView");
+        //Log.e(LOG_TAG,"inside onDestrooyView");
         //call.cancel();
     }
 }

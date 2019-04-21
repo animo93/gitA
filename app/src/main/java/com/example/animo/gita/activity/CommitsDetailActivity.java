@@ -1,27 +1,18 @@
 package com.example.animo.gita.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.animo.gita.Constants;
 import com.example.animo.gita.CustomViews.ScrollDisabledListView;
-import com.example.animo.gita.NotificationService;
 import com.example.animo.gita.R;
 import com.example.animo.gita.adapter.CommitDetailAdapter;
 import com.example.animo.gita.adapter.CommitFileAdapter;
@@ -31,7 +22,6 @@ import com.example.animo.gita.retrofit.ApiClient;
 import com.example.animo.gita.retrofit.ApiInterface;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,7 +86,7 @@ public class CommitsDetailActivity extends AppCompatActivity {
         call.enqueue(new Callback<Commit>() {
             @Override
             public void onResponse(Call<Commit> call, Response<Commit> response) {
-                Log.i(LOG_TAG,"inside onResponse");
+                //Log.i(LOG_TAG,"inside onResponse");
                 Commit commit = response.body();
                 //setupViews(commit);
 
@@ -122,7 +112,7 @@ public class CommitsDetailActivity extends AppCompatActivity {
                 fileListMap.put(Constants.FILES_RENAMED,renamedFilesList);
                 if(deletedFilesList.size()>0)
                 fileListMap.put(Constants.FILES_DELETD,deletedFilesList);
-                Log.d(LOG_TAG,"Total map size "+fileListMap.size());
+                //Log.d(LOG_TAG,"Total map size "+fileListMap.size());
 
                 commitDetailAdapter.setMapFileList(fileListMap);
                 commitDetailAdapter.setCommit(commit);
@@ -145,7 +135,7 @@ public class CommitsDetailActivity extends AppCompatActivity {
 
             private void setupListViews(String type, ListView listView, Commit commit) {
                 List<Files> filesList = new ArrayList<Files>();
-                Log.d(LOG_TAG,"Total file list size "+commit.getFiles().size());
+                //Log.d(LOG_TAG,"Total file list size "+commit.getFiles().size());
                 for(Files files : commit.getFiles()){
                     if(files.getStatus().equals(type)) {
                         /*TextView textView = new TextView(mContext);
@@ -166,14 +156,14 @@ public class CommitsDetailActivity extends AppCompatActivity {
 
                     }
                 }
-                Log.d(LOG_TAG,"File size of "+type+" is "+filesList.size());
+               // Log.d(LOG_TAG,"File size of "+type+" is "+filesList.size());
                 CommitFileAdapter adapter = new CommitFileAdapter(getApplicationContext(),listView.getId(),filesList);
                 listView.setAdapter(adapter);
             }
 
             @Override
             public void onFailure(Call<Commit> call, Throwable t) {
-                Log.e(LOG_TAG,"inside Failure "+t.toString());
+               // Log.e(LOG_TAG,"inside Failure "+t.toString());
             }
         });
     }

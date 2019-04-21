@@ -34,6 +34,7 @@
     <string name="cancel">Cancel</string>
     <string name="mark_favourite_message">Choose Events for getting Notified</string>
     <string name="unmark_dialog_title">Unmark As Favourite</string>
+    <string name="logout_confirm">Do you really want to logout</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">

@@ -3,13 +3,10 @@ package com.example.animo.gita.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.animo.gita.Constants;
@@ -53,7 +50,7 @@ public class CommitDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.i(LOG_TAG,"inside onCreateViewHolder");
+        //Log.i(LOG_TAG,"inside onCreateViewHolder");
         if(parent instanceof RecyclerView){
             {
                 if(viewType==0){
@@ -99,7 +96,7 @@ public class CommitDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             /*holder1.typeView.setText("Files "+ key);*/
             holder1.typeView.setText(mContext.getResources().getString(R.string.File_type,key));
             final List<Files> value = mapFileList.get(key);
-            Log.d(LOG_TAG,"Size of "+key+" "+value.size());
+            //Log.d(LOG_TAG,"Size of "+key+" "+value.size());
 
             for(int i=0;i<value.size();i++){
                 View view = LayoutInflater.from(mContext).inflate(R.layout.file_commits,holder1.layout,false);
@@ -116,7 +113,7 @@ public class CommitDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onClick(View view) {
                         {
-                            Log.i(LOG_TAG,"inside onClick");
+                            //Log.i(LOG_TAG,"inside onClick");
                             Files files= value.get(finalI);
                             Intent intent = new Intent(mContext, FileDiffActivity.class);
                             intent.putExtra(Constants.TITLE,files.getName());

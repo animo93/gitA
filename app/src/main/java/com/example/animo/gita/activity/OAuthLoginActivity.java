@@ -15,16 +15,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.ValueCallback;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.webkit.WebViewDatabase;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -43,9 +39,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GithubAuthProvider;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -86,7 +79,7 @@ public class OAuthLoginActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         String title = intent.getStringExtra(Constants.TITLE);
-        Log.d(LOG_TAG,"Title is "+title);
+        //Log.d(LOG_TAG,"Title is "+title);
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -124,9 +117,10 @@ public class OAuthLoginActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                Log.e(LOG_TAG,"url is "+url);
+                //Log.e(LOG_TAG,"url is "+url);
                 String title = mWebView.getTitle();
-                Log.e(LOG_TAG,"Title is "+title);
+                //Log.e(LOG_TAG,"Title is "+title);
+
                 /*if(url.startsWith(Constants.REDIRECT_URL)){
                     authenticateUri(url);
                 }*/
@@ -137,7 +131,7 @@ public class OAuthLoginActivity extends AppCompatActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                Log.e(LOG_TAG,"onPageStarted url "+url);
+                //Log.e(LOG_TAG,"onPageStarted url "+url);
                 if(url.startsWith(Constants.REDIRECT_URL)){
                     if(url.contains("?code=")){
                         /*Uri uri = Uri.parse(url);
@@ -165,7 +159,7 @@ public class OAuthLoginActivity extends AppCompatActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                Log.e(LOG_TAG,"Web request "+request.getUrl().toString());
+                //Log.e(LOG_TAG,"Web request "+request.getUrl().toString());
                 if(request.getUrl().toString().startsWith(Constants.REDIRECT_URL))
                     return true;
                 //return super.shouldOverrideUrlLoading(view, request);
@@ -195,7 +189,7 @@ public class OAuthLoginActivity extends AppCompatActivity {
                 ApiInterface apiService = ApiClient.createService(ApiInterface.class,null);
                 String clientId = new Utility().getClientId(mActivity);
                 String clientKey = new Utility().getClientSecret(mActivity);
-                Log.e(LOG_TAG,"Client id= "+clientId+" and key "+clientKey);
+                //Log.e(LOG_TAG,"Client id= "+clientId+" and key "+clientKey);
                 Call<Access> call = apiService.getAccessToken(code,clientId,clientKey);
                 call.enqueue(new Callback<Access>() {
                     @Override
@@ -209,7 +203,7 @@ public class OAuthLoginActivity extends AppCompatActivity {
                                         .addOnCompleteListener(mActivity, new OnCompleteListener<AuthResult>() {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                                Log.d(LOG_TAG,"Sign in with credential "+task.isSuccessful());
+                                               // Log.d(LOG_TAG,"Sign in with credential "+task.isSuccessful());
                                                 saveToSharedPreference(getString(R.string.access_token),accessToken);
                                                 Intent intent = new Intent(mActivity,MainActivity.class);
                                                 intent.putExtra("access_token",accessToken);
@@ -217,7 +211,7 @@ public class OAuthLoginActivity extends AppCompatActivity {
                                                 startActivity(intent);
                                                 finish();
                                                 if(!task.isSuccessful()){
-                                                    Log.e(LOG_TAG,"Sign in with credential ",task.getException());
+                                                    //Log.e(LOG_TAG,"Sign in with credential ",task.getException());
                                                     Toast.makeText(mActivity,getResources().getString(R.string.Login_failure),Toast.LENGTH_SHORT).show();
                                                 }
 
@@ -230,13 +224,13 @@ public class OAuthLoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<Access> call, Throwable t) {
-                        Log.e(LOG_TAG,"unable to get access token....Try Again"+t.toString());
+                        //Log.e(LOG_TAG,"unable to get access token....Try Again"+t.toString());
 
                     }
                 });
 
             }else {
-                Log.e(LOG_TAG,"Unable to authorize ....PLease try again");
+                //Log.e(LOG_TAG,"Unable to authorize ....PLease try again");
             }
         }
     }

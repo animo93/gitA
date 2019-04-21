@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,26 +54,26 @@ public class FilesFragment extends Fragment {
         final String owner = getArguments().getString(Constants.OWNER);
         final String path = getArguments().getString(Constants.PATH);
 
-        Log.d(LOG_TAG,"Repo name "+repo+" and owner "+owner+" and Path "+path);
+        //Log.d(LOG_TAG,"Repo name "+repo+" and owner "+owner+" and Path "+path);
 
         ApiInterface apiService = ApiClient.createService(ApiInterface.class,null);
         Call<List<Files>> call = apiService.getContents(owner,repo,path);
         call.enqueue(new Callback<List<Files>>() {
             @Override
             public void onResponse(Call<List<Files>> call, Response<List<Files>> response) {
-                Log.i(LOG_TAG,"inside onResponse");
+                //Log.i(LOG_TAG,"inside onResponse");
                 filesList = response.body();
                 filesAdapter.setFilesList(filesList);
                 filesAdapter.setRepoName(repo);
                 filesAdapter.setOwner(owner);
                 filesAdapter.notifyDataSetChanged();
-                Log.d(LOG_TAG,"Size of Commits "+filesList.size());
+                //Log.d(LOG_TAG,"Size of Commits "+filesList.size());
 
             }
 
             @Override
             public void onFailure(Call<List<Files>> call, Throwable t) {
-                Log.e(LOG_TAG,"inside Failure "+t.toString());
+                //Log.e(LOG_TAG,"inside Failure "+t.toString());
 
             }
         });

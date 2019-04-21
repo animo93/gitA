@@ -3,9 +3,7 @@ package com.example.animo.gita.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,16 +60,16 @@ public class AboutFragment extends Fragment {
         call.enqueue(new Callback<List<Files>>() {
             @Override
             public void onResponse(Call<List<Files>> call, Response<List<Files>> response) {
-                Log.i(LOG_TAG,"inside onResponse");
+                //Log.i(LOG_TAG,"inside onResponse");
                 filesList = response.body();
-                Log.d(LOG_TAG,"Size of Commits "+filesList.size());
+                //Log.d(LOG_TAG,"Size of Commits "+filesList.size());
                 for(Files files : filesList){
                     if(files.getType().equals("file") &&
                             files.getName().equals("README.md")){
                         /*Log.d(LOG_TAG,"readme url "+files.getDownload_url());
                         webView.loadUrl(files.getDownload_url());*/
                         String url = files.get_links().get("html");
-                        Log.d(LOG_TAG,"readmeUrl "+url);
+                        //Log.d(LOG_TAG,"readmeUrl "+url);
                         webView.loadUrl(url);
                         break;
                     }
@@ -81,7 +79,7 @@ public class AboutFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Files>> call, Throwable t) {
-                Log.e(LOG_TAG,"inside Failure "+t.toString());
+                //Log.e(LOG_TAG,"inside Failure "+t.toString());
 
             }
         });
@@ -113,7 +111,7 @@ public class AboutFragment extends Fragment {
         else
             languageView.setText(language);
 
-        Log.d(LOG_TAG,"issues "+aboutFragment.getArguments().getInt(Constants.ISSUE_COUNT));
+        //Log.d(LOG_TAG,"issues "+aboutFragment.getArguments().getInt(Constants.ISSUE_COUNT));
 
         issueCountView.setText(String.valueOf(aboutFragment.getArguments().getInt(Constants.ISSUE_COUNT)));
         stargazersCountView.setText(String.valueOf(aboutFragment.getArguments().getInt(Constants.STARGAZERS)));

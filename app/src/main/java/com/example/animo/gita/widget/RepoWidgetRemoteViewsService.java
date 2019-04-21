@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Binder;
-import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -27,7 +26,7 @@ public class RepoWidgetRemoteViewsService extends RemoteViewsService {
             private Cursor data = null;
             @Override
             public void onCreate() {
-                Log.i(LOG_TAG,"inside onCreate");
+                //Log.i(LOG_TAG,"inside onCreate");
 
             }
 
@@ -44,7 +43,7 @@ public class RepoWidgetRemoteViewsService extends RemoteViewsService {
                         null,
                         null,
                         null);
-                Log.d(LOG_TAG,"Data size "+data.getCount());
+                //Log.d(LOG_TAG,"Data size "+data.getCount());
                 Binder.restoreCallingIdentity(identityToken);
 
 
@@ -70,7 +69,7 @@ public class RepoWidgetRemoteViewsService extends RemoteViewsService {
                         data == null || !data.moveToPosition(position)) {
                     return null;
                 }
-                Log.i(LOG_TAG,"inside getViewAt");
+                //Log.i(LOG_TAG,"inside getViewAt");
                 RemoteViews views = new RemoteViews(getPackageName(),
                         R.layout.widget_list_item_repo);
                 views.setTextViewText(R.id.title,data.getString(RepoContract.FavRepos.COL_REPO_TITLE));
